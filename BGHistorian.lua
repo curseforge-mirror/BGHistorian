@@ -31,6 +31,8 @@ function BGH:OnInitialize()
     self.sortOrder = true
     self.current = {
         status = "none",
+        battleFieldIndex = nil,
+        stats = {},
     }
 end
 
@@ -89,12 +91,12 @@ function BGH:UPDATE_BATTLEFIELD_STATUS(eventName, battleFieldIndex)
     self:Print("GetBattlefieldStatus", status, mapName, instanceID, asGroup)
 
     if self.current["status"] == "none" and status == "active" then
-        self.battlegroundEnded = false
         self:Print("Entering battleground")
-        self.current["battleFieldIndex"] = battleFieldIndex
-        self.current["startTime"] = time()
-        self.current["mapName"] = mapName
+        self.battlegroundEnded = false
         self.current["status"] = status
+        self.current["battleFieldIndex"] = battleFieldIndex
+        self.current["stats"]["startTime"] = time()
+        self.current["stats"]["mapName"] = mapName
     end
 
     if self.current["battleFieldIndex"] == battleFieldIndex and self.current["status"] == "active" and status == "none" then
@@ -123,11 +125,11 @@ function BGH:UPDATE_BATTLEFIELD_SCORE(eventName)
     local runTime = GetBattlefieldInstanceRunTime(); -- includes prep time
     -- self:Print(runTime, numHorde, numAlliance)
 
-    self.current["battlefieldWinner"] = battlefieldWinner
-    self.current["runTime"] = runTime
-    self.current["numHorde"] = numHorde
-    self.current["numAlliance"] = numAlliance
-    self.current["endTime"] = time()
+    self.current["stats"]["battlefieldWinner"] = battlefieldWinner
+    self.current["stats"]["runTime"] = runTime
+    self.current["stats"]["numHorde"] = numHorde
+    self.current["stats"]["numAlliance"] = numAlliance
+    self.current["stats"]["endTime"] = time()
 
     -- BG specific stats
 	local numStatColumns = GetNumBattlefieldStats();
@@ -161,8 +163,8 @@ function BGH:UPDATE_BATTLEFIELD_SCORE(eventName)
         table.insert(playersStats, battlefieldScore)
     end
 
-    self.current["scores"] = playersStats
-    table.insert(self.db.char.history, self.current)
+    self.current["stats"]["scores"] = playersStats
+    table.insert(self.db.char.history, self.current["stats"])
 end
 
 function BGH:Reset()
