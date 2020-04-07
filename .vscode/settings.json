@@ -1,0 +1,22 @@
+{
+    "Lua.diagnostics.globals": [
+        "LibStub",
+        "GetBattlegroundInfo",
+        "GetBattlefieldStatus",
+        "time",
+        "GetBattlefieldWinner",
+        "GetBattlefieldTeamInfo",
+        "GetBattlefieldInstanceRunTime",
+        "GetNumBattlefieldStats",
+        "GetNumBattlefieldScores",
+        "GetBattlefieldScore",
+        "GetBattlefieldStatData",
+        "date",
+        "HybridScrollFrame_CreateButtons",
+        "CreateFrame",
+        "HybridScrollFrame_GetButtons",
+        "HybridScrollFrame_GetOffset",
+        "HybridScrollFrame_Update",
+        "UnitName"
+    ]
+}
