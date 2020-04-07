@@ -2,7 +2,7 @@
 ## Title: BGHistorian
 ## Notes: Battlegrounds history and statistics
 ## Author: zergrael
-## Version: 0.1.0
+## Version: 0.2.0
 ## SavedVariables: BGHistorian
 
 embeds.xml
