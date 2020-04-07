@@ -97,7 +97,6 @@ function BGH:RefreshLayout()
     local offset = HybridScrollFrame_GetOffset(scrollFrame);
 
     f:SetStatusText(string.format("Recorded %i battlegrounds", #rows))
-    -- self:Printf("Buttons : %i | Offset : %i | Rows : %i", #buttons, offset, #rows)
 
 	for buttonIndex = 1, #buttons do
 		local button = buttons[buttonIndex];
@@ -129,7 +128,6 @@ function BGH:RefreshLayout()
 	local totalHeight = #rows * buttonHeight;
 	local shownHeight = #buttons * buttonHeight;
 
-    -- self:Printf("HybridScrollFrame_Update %i %i %i", buttonHeight, totalHeight, shownHeight)
 	HybridScrollFrame_Update(scrollFrame, totalHeight, shownHeight);
 end
 
