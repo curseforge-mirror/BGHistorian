@@ -1,4 +1,5 @@
 local BGH = LibStub("AceAddon-3.0"):NewAddon("BGHistorian", "AceConsole-3.0", "AceEvent-3.0", "AceSerializer-3.0")
+local L = LibStub("AceLocale-3.0"):GetLocale("BGHistorian", true)
 
 local debugData = nil
 function BGH:OnInitialize()
@@ -118,7 +119,7 @@ end
 
 function BGH:Reset()
     self.db:ResetDB()
-    self:Print("Database reset")
+    self:Print(L["Database reset"])
 end
 
 function BGH:ChatCommandHandler(input)

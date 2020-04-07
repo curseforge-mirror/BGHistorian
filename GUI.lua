@@ -1,4 +1,5 @@
 local BGH = LibStub("AceAddon-3.0"):GetAddon("BGHistorian")
+local L = LibStub("AceLocale-3.0"):GetLocale("BGHistorian", true)
 local AceGUI = LibStub("AceGUI-3.0")
 local f, scrollFrame, rows
 
@@ -19,7 +20,7 @@ function BGH:CreateGUI()
     local btn;
 	btn = AceGUI:Create("InteractiveLabel")
     btn:SetWidth(150)
-    btn:SetText(" Date")
+    btn:SetText(L["Date"])
     btn:SetJustifyH("LEFT")
 	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
 	btn:SetCallback("OnClick", function() BGH:Sort("endTime") end)
@@ -27,7 +28,7 @@ function BGH:CreateGUI()
 
 	btn = AceGUI:Create("InteractiveLabel")
 	btn:SetWidth(174)
-	btn:SetText(" Battleground")
+	btn:SetText(L["Battleground"])
     btn:SetJustifyH("LEFT")
 	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
 	btn:SetCallback("OnClick", function() BGH:Sort("mapName") end)
@@ -35,7 +36,7 @@ function BGH:CreateGUI()
 
 	btn = AceGUI:Create("InteractiveLabel")
 	btn:SetWidth(100)
-	btn:SetText(" Duration")
+	btn:SetText(L["Duration"])
     btn:SetJustifyH("LEFT")
 	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
 	btn:SetCallback("OnClick", function() BGH:Sort("runTime") end)
@@ -43,7 +44,7 @@ function BGH:CreateGUI()
 
 	btn = AceGUI:Create("InteractiveLabel")
 	btn:SetWidth(40)
-	btn:SetText("Winner")
+	btn:SetText(L["Winner"])
     btn:SetJustifyH("CENTER")
 	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
 	btn:SetCallback("OnClick", function() BGH:Sort("battlefieldWinner") end)
@@ -51,7 +52,7 @@ function BGH:CreateGUI()
 
 	btn = AceGUI:Create("InteractiveLabel")
 	btn:SetWidth(35)
-	btn:SetText("KB ")
+	btn:SetText(L["KB"])
     btn:SetJustifyH("RIGHT")
 	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
 	btn:SetCallback("OnClick", function() BGH:Sort("killingBlows") end)
@@ -59,7 +60,7 @@ function BGH:CreateGUI()
 
 	btn = AceGUI:Create("InteractiveLabel")
 	btn:SetWidth(40)
-	btn:SetText("HK ")
+	btn:SetText(L["HK"])
     btn:SetJustifyH("RIGHT")
 	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
 	btn:SetCallback("OnClick", function() BGH:Sort("honorableKills") end)
@@ -67,7 +68,7 @@ function BGH:CreateGUI()
 
 	btn = AceGUI:Create("InteractiveLabel")
 	btn:SetWidth(40)
-	btn:SetText("Deaths ")
+	btn:SetText(L["Deaths"])
     btn:SetJustifyH("RIGHT")
 	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
 	btn:SetCallback("OnClick", function() BGH:Sort("deaths") end)
@@ -75,7 +76,7 @@ function BGH:CreateGUI()
 
 	btn = AceGUI:Create("InteractiveLabel")
 	btn:SetWidth(44)
-	btn:SetText("Honor ")
+	btn:SetText(L["Honor"])
     btn:SetJustifyH("RIGHT")
 	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
 	btn:SetCallback("OnClick", function() BGH:Sort("honorGained") end)
@@ -96,7 +97,7 @@ function BGH:RefreshLayout()
 	local buttons = HybridScrollFrame_GetButtons(scrollFrame);
     local offset = HybridScrollFrame_GetOffset(scrollFrame);
 
-    f:SetStatusText(string.format("Recorded %i battlegrounds", #rows))
+    f:SetStatusText(string.format(L["Recorded %i battlegrounds"], #rows))
 
 	for buttonIndex = 1, #buttons do
 		local button = buttons[buttonIndex];
@@ -107,7 +108,7 @@ function BGH:RefreshLayout()
             button:SetID(itemIndex);
             -- button.Icon:SetTexture(133308);
             button.Icon:SetTexture(136628);
-            button.EndTime:SetText(date("%F %T", row["endTime"]));
+            button.EndTime:SetText(date(L["%F %T"], row["endTime"]));
             button.MapName:SetText(row["mapName"]);
             button.RunTime:SetText(HumanDuration(row["runTime"]));
             -- button.BattlefieldWinner:SetTexture(130705 - row["battlefieldWinner"]);
@@ -162,12 +163,12 @@ end
 function HumanDuration(miliseconds)
     local seconds = math.floor(miliseconds / 1000)
     if seconds < 60 then
-        return seconds.."s"
+        return seconds..L["s"]
     end
     local minutes = math.floor(seconds / 60)
     if minutes < 60 then
-        return minutes.."m "..(seconds - minutes * 60).."s"
+        return minutes..L["m"].." "..(seconds - minutes * 60)..L["s"]
     end
     local hours = math.floor(minutes / 60)
-    return hours.."h "..(minutes - hours * 60).."m"
+    return hours..L["h"].." "..(minutes - hours * 60)..L["m"]
 end

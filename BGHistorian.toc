@@ -6,6 +6,7 @@
 ## SavedVariables: BGHistorian
 
 embeds.xml
+locales.xml
 
 BGHistorian.lua
 GUI.lua
