@@ -50,7 +50,7 @@ function BGH:CreateGUI()
     tableHeader:AddChild(btn)
 
 	btn = AceGUI:Create("InteractiveLabel")
-	btn:SetWidth(32)
+	btn:SetWidth(35)
 	btn:SetText("KB ")
     btn:SetJustifyH("RIGHT")
 	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
