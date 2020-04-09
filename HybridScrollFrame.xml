@@ -42,7 +42,7 @@
 					</Anchors>
                 </Texture>
                 <FontString parentKey="KillingBlows" inherits="GameFontHighlightSmall" justifyH="RIGHT">
-                    <Size x="32"/>
+                    <Size x="40"/>
 					<Anchors>
 						<Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.BattlefieldWinner" x="8"/>
 					</Anchors>
@@ -50,19 +50,19 @@
                 <FontString parentKey="HonorableKills" inherits="GameFontHighlightSmall" justifyH="RIGHT">
                     <Size x="40"/>
 					<Anchors>
-						<Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.KillingBlows"/>
+						<Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.KillingBlows" x="4"/>
 					</Anchors>
                 </FontString>
                 <FontString parentKey="Deaths" inherits="GameFontHighlightSmall" justifyH="RIGHT">
                     <Size x="40"/>
 					<Anchors>
-						<Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.HonorableKills"/>
+						<Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.HonorableKills" x="4"/>
 					</Anchors>
                 </FontString>
                 <FontString parentKey="HonorGained" inherits="GameFontHighlightSmall" justifyH="RIGHT">
                     <Size x="44"/>
 					<Anchors>
-						<Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.Deaths"/>
+						<Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.Deaths" x="4"/>
 					</Anchors>
                 </FontString>
             </Layer>
