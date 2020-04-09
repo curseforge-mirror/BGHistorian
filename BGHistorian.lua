@@ -146,9 +146,10 @@ function BGH:DrawMinimapIcon()
             end
 		end,
 		OnTooltipShow = function(tooltip)
-			tooltip:AddLine(addonTitle)
-			tooltip:AddLine("Left Click: " .. L["Show history"]);
-			tooltip:AddLine("Right Click: " .. L["Options"]);
+			tooltip:AddLine(string.format("%s |cff777777v%s|r", addonTitle, "@project-version@"))
+			tooltip:AddLine(string.format("|cFFCFCFCF%s|r %s", L["Left Click"], L["to open the main window"]))
+			tooltip:AddLine(string.format("|cFFCFCFCF%s|r %s", L["Right Click"], L["to open options"]))
+			tooltip:AddLine(string.format("|cFFCFCFCF%s|r %s", L["Drag"], L["to move this button"]))
 		end
     }), self.db.profile.minimapButton)
 end
