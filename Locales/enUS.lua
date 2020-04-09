@@ -21,6 +21,8 @@ L["Arathi Basin"] = "Arathi Basin"
 
 L["Show history"] = "Show history"
 L["Options"] = "Options"
+L["Optimize database"] = "Optimize database"
+L["Cleanup and optimize collected data"] = "Cleanup and optimize collected data"
 L["Database Settings"] = "Database Settings"
 L["Purge database"] = "Purge database"
 L["Delete all collected data"] = "Delete all collected data"

@@ -116,7 +116,7 @@ function BGH:UPDATE_BATTLEFIELD_SCORE(eventName)
     table.insert(self.db.char.history, self.current["stats"])
 end
 
-function BGH:Reset()
+function BGH:ResetDatabase()
     self.db:ResetDB()
     self:Print(L["Database reset"])
 end
@@ -209,4 +209,18 @@ function BGH:MapId(mapName)
     end
 
     return nil
+end
+
+function BGH:OptimizeDatabase()
+    for i, row in ipairs(self.db.char.history) do
+        if row["battleFieldIndex"] then
+            self.db.char.history[i]["battleFieldIndex"] = nil
+        end
+        if row["status"] then
+            self.db.char.history[i]["status"] = nil
+        end
+        if not row["mapId"] then
+            self.db.char.history[i]["mapId"] = self:MapId(row["mapName"])
+        end
+    end
 end

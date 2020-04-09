@@ -29,13 +29,20 @@ function BGH:RegisterOptionsTable()
                         name = L["Database Settings"],
                         inline = true,
                         args = {
+                            optimize = {
+                                order = 11,
+                                type = "execute",
+                                name = L["Optimize database"],
+                                desc = L["Cleanup and optimize collected data"],
+                                func = function() self:OptimizeDatabase() end
+                            },
                             purge = {
                                 order = 19,
                                 type = "execute",
                                 name = L["Purge database"],
                                 desc = L["Delete all collected data"],
                                 confirm = true,
-                                func = function() self:Reset() end
+                                func = function() self:ResetDatabase() end
                             },
                         },
                     },
