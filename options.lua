@@ -29,8 +29,19 @@ function BGH:RegisterOptionsTable()
                         name = L["Database Settings"],
                         inline = true,
                         args = {
-                            optimize = {
+                            maxHistory = {
                                 order = 11,
+                                type = "range",
+                                name = L["Maximum history records"],
+                                desc = L["Battlegrounds records can impact memory usage (0 means unlimited)"],
+                                min = 0,
+                                max = 1000,
+                                step = 10,
+                                get = function() return self.db.profile.maxHistory end,
+                                set = function(_, val) self.db.profile.maxHistory = val end,
+                            },
+                            optimize = {
+                                order = 18,
                                 type = "execute",
                                 name = L["Optimize database"],
                                 desc = L["Cleanup and optimize collected data"],

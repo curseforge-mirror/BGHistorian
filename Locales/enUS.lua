@@ -21,6 +21,8 @@ L["Arathi Basin"] = "Arathi Basin"
 
 L["Show history"] = "Show history"
 L["Options"] = "Options"
+L["Maximum history records"] = "Maximum history records"
+L["Battlegrounds records can impact memory usage (0 means unlimited)"] = "Battlegrounds records can impact memory usage (0 means unlimited)"
 L["Optimize database"] = "Optimize database"
 L["Cleanup and optimize collected data"] = "Cleanup and optimize collected data"
 L["Database Settings"] = "Database Settings"

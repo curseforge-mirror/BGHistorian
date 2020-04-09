@@ -10,6 +10,7 @@ function BGH:OnInitialize()
             minimapButton = {
                 hide = false,
             },
+            maxHistory = 0,
         },
         char = {
             history = {},
@@ -116,6 +117,13 @@ function BGH:RecordBattleground()
 
     self.current["stats"]["scores"] = playersStats
     table.insert(self.db.char.history, self.current["stats"])
+
+    if self.db.profile.maxHistory > 0 then
+        -- Shift array until we get under threshold
+        while (#self.db.char.history > self.db.profile.maxHistory) do
+            table.remove(self.db.char.history, 1)
+        end
+    end
 end
 
 function BGH:ResetDatabase()
