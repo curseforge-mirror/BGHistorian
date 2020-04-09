@@ -11,6 +11,9 @@ function BGH:CreateGUI()
 
     -- f:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
     f:SetTitle(addonTitle)
+    local frameName = addonName .."_MainFrame"
+	_G[frameName] = f
+	table.insert(UISpecialFrames, frameName) -- Allow ESC close
     f:SetStatusText("Status Bar")
     f:SetLayout("Flow")
 

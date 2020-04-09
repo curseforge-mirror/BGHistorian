@@ -19,7 +19,8 @@
         "HybridScrollFrame_Update",
         "UnitName",
         "GetAddOnInfo",
-        "InterfaceOptionsFrame_OpenToCategory"
+        "InterfaceOptionsFrame_OpenToCategory",
+        "UISpecialFrames"
     ],
     "Lua.runtime.version": "Lua 5.1"
 }
