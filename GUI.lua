@@ -163,12 +163,12 @@ end
 function HumanDuration(miliseconds)
     local seconds = math.floor(miliseconds / 1000)
     if seconds < 60 then
-        return seconds..L["s"]
+        return string.format(L["%is"], seconds)
     end
     local minutes = math.floor(seconds / 60)
     if minutes < 60 then
-        return minutes..L["m"].." "..(seconds - minutes * 60)..L["s"]
+        return string.format(L["%im %is"], minutes, (seconds - minutes * 60))
     end
     local hours = math.floor(minutes / 60)
-    return hours..L["h"].." "..(minutes - hours * 60)..L["m"]
+    return string.format(L["%ih %im"], hours, (minutes - hours * 60))
 end

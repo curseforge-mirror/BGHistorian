@@ -11,9 +11,9 @@ L["Honor"] = "Honor"
 L["Recorded %i battlegrounds"] = "Recorded %i battlegrounds"
 L["%F %T"] = "%F %T"
 
-L["h"] = "h"
-L["m"] = "m"
-L["s"] = "s"
+L["%ih %im"] = "%ih %im"
+L["%im %is"] = "%im %is"
+L["%is"] = "%is"
 
 L["Alterac Valley"] = "Alterac Valley"
 L["Arathi Basin"] = "Arathi Basin"
