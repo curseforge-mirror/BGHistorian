@@ -1,4 +1,4 @@
-# BGHistorian
+# Battlegrounds Historian
 
 **WoW classic addon for battlegrounds history and statistics**
 
@@ -28,7 +28,7 @@ Ideas for later additions include :
 - Display weekend current weekend battleground
 - Record reputation gains
 - Record damage & heals
-- Display known best performers at the start of battlegrounds
+- Display known best performers at the start of battleground
 
 ## Known issues
 
