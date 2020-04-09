@@ -17,7 +17,9 @@
         "HybridScrollFrame_GetButtons",
         "HybridScrollFrame_GetOffset",
         "HybridScrollFrame_Update",
-        "UnitName"
+        "UnitName",
+        "GetAddOnInfo",
+        "InterfaceOptionsFrame_OpenToCategory"
     ],
     "Lua.runtime.version": "Lua 5.1"
 }

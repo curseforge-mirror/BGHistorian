@@ -1,9 +1,12 @@
-local BGH = LibStub("AceAddon-3.0"):NewAddon("BGHistorian", "AceConsole-3.0", "AceEvent-3.0", "AceSerializer-3.0")
-local L = LibStub("AceLocale-3.0"):GetLocale("BGHistorian", true)
+local addonName = "BGHistorian"
+local addonTitle = select(2, GetAddOnInfo(addonName))
+local BGH = LibStub("AceAddon-3.0"):NewAddon(addonName, "AceConsole-3.0", "AceEvent-3.0", "AceSerializer-3.0")
+local L = LibStub("AceLocale-3.0"):GetLocale(addonName, true)
+local libDBIcon = LibStub("LibDBIcon-1.0")
 
 local debugData = nil
 function BGH:OnInitialize()
-    self.db = LibStub("AceDB-3.0"):New("BGHistorian", {
+    self.db = LibStub("AceDB-3.0"):New(addonName, {
         profile = {
             minimapButton = {
                 hide = false,
@@ -18,9 +21,9 @@ function BGH:OnInitialize()
     self:RegisterEvent("UPDATE_BATTLEFIELD_STATUS")
     self:RegisterEvent("UPDATE_BATTLEFIELD_SCORE")
 
-    self:RegisterChatCommand("bgh", "ChatCommandHandler")
-
 	self:DrawMinimapIcon()
+    -- self:RegisterChatCommand("bgh", "ChatCommandHandler")
+    self:RegisterOptionsTable()
 
     self.battlegroundEnded = false
     self.sortColumn = "endTime"
@@ -122,27 +125,36 @@ function BGH:Reset()
     self:Print(L["Database reset"])
 end
 
-function BGH:ChatCommandHandler(input)
-    if input == "reset" then
-        self:Reset()
-    else
-        self:Toggle()
-    end
-end
 
 function BGH:DrawMinimapIcon()
-	LibStub("LibDBIcon-1.0"):Register("BGHistorian", LibStub("LibDataBroker-1.1"):NewDataObject("BGHistorian",
+	libDBIcon:Register(addonName, LibStub("LibDataBroker-1.1"):NewDataObject(addonName,
 	{
 		type = "data source",
-		text = "BGHistorian",
+		text = addonName,
         icon = "interface/icons/inv_misc_book_03",
 		OnClick = function(self, button)
-            BGH:Toggle()
+			if (button == "RightButton") then
+                InterfaceOptionsFrame_OpenToCategory(addonName)
+                InterfaceOptionsFrame_OpenToCategory(addonName)
+            else
+                BGH:Toggle()
+            end
 		end,
 		OnTooltipShow = function(tooltip)
-			tooltip:AddLine("BGHistorian")
+			tooltip:AddLine(addonTitle)
+			tooltip:AddLine("Left Click: " .. L["Show history"]);
+			tooltip:AddLine("Right Click: " .. L["Options"]);
 		end
-	}), self.db.profile.minimapButton)
+    }), self.db.profile.minimapButton)
+end
+
+function BGH:ToggleMinimapButton()
+    self.db.profile.minimapButton.hide = not self.db.profile.minimapButton.hide
+    if self.db.profile.minimapButton.hide then
+        libDBIcon:Hide(addonName)
+    else
+        libDBIcon:Show(addonName)
+    end
 end
 
 function BGH:BuildTable(sortColumn)

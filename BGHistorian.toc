@@ -11,3 +11,4 @@ locales.xml
 BGHistorian.lua
 GUI.lua
 HybridScrollFrame.xml
+options.lua

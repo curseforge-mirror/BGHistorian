@@ -19,4 +19,8 @@ L["Alterac Valley"] = "Alterac Valley"
 L["Arathi Basin"] = "Arathi Basin"
 L["Warsong Gulch"] = "Warsong Gulch"
 
+L["Show history"] = "Show history"
+L["Options"] = "Options"
+L["Minimap Button Settings"] = "Minimap Button Settings"
+L["Show minimap button"] = "Show minimap button"
 L["Database reset"] = "Database reset"

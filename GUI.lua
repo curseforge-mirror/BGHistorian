@@ -1,5 +1,7 @@
-local BGH = LibStub("AceAddon-3.0"):GetAddon("BGHistorian")
-local L = LibStub("AceLocale-3.0"):GetLocale("BGHistorian", true)
+local addonName = "BGHistorian"
+local addonTitle = select(2, GetAddOnInfo(addonName))
+local BGH = LibStub("AceAddon-3.0"):GetAddon(addonName)
+local L = LibStub("AceLocale-3.0"):GetLocale(addonName, true)
 local AceGUI = LibStub("AceGUI-3.0")
 local f, scrollFrame, rows
 
@@ -8,7 +10,7 @@ function BGH:CreateGUI()
     f:Hide()
 
     -- f:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
-    f:SetTitle("BGHistorian")
+    f:SetTitle(addonTitle)
     f:SetStatusText("Status Bar")
     f:SetLayout("Flow")
 
