@@ -5,17 +5,17 @@ L["Date"] = "Date"
 L["Battleground"] = "Battleground"
 L["Duration"] = "Duration"
 L["Winner"] = "Winner"
-L["KB"] = "KB"
-L["HK"] = "HK"
+L["KB"] = "KB" -- Killing Blows
+L["HK"] = "HK" -- Honorable Kills
 L["Deaths"] = "Deaths"
-L["Honor"] = "Honor"
+L["Honor"] = "Honor" -- Bonus Honor
 L["Recorded %i battlegrounds"] = "Recorded %i battlegrounds"
 -- Date & time
-L["%F %T"] = "%F %T"
+L["%F %T"] = "%F %T" -- Date format
 -- Duration
-L["%ih %im"] = "%ih %im"
-L["%im %is"] = "%im %is"
-L["%is"] = "%is"
+L["%ih %im"] = "%ih %im" -- Duration in hours and minutes
+L["%im %is"] = "%im %is" -- Duration in minutes and seconds
+L["%is"] = "%is" -- Duration in seconds only
 
 -- Battlegrounds
 L["Alterac Valley"] = "Alterac Valley"
@@ -23,7 +23,6 @@ L["Warsong Gulch"] = "Warsong Gulch"
 L["Arathi Basin"] = "Arathi Basin"
 
 -- Minimap buttons
-L["Show history"] = "Show history"
 L["Options"] = "Options"
 L["Left Click"] = "Left Click"
 L["Right Click"] = "Right Click"
