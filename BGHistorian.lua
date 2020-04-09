@@ -70,13 +70,15 @@ function BGH:UPDATE_BATTLEFIELD_SCORE(eventName)
     self.battlegroundEnded = true
     -- self:Print("Battleground ended")
 
+    self:RecordBattleground()
+end
+
+function BGH:RecordBattleground()
 	local _, _, _, _, numHorde = GetBattlefieldTeamInfo(0)
     local _, _, _, _, numAlliance = GetBattlefieldTeamInfo(1)
-    local runTime = GetBattlefieldInstanceRunTime() -- includes prep time
-    -- self:Print(runTime, numHorde, numAlliance)
 
-    self.current["stats"]["battlefieldWinner"] = battlefieldWinner
-    self.current["stats"]["runTime"] = runTime
+    self.current["stats"]["battlefieldWinner"] = GetBattlefieldWinner()
+    self.current["stats"]["runTime"] = GetBattlefieldInstanceRunTime() -- includes prep time
     self.current["stats"]["numHorde"] = numHorde
     self.current["stats"]["numAlliance"] = numAlliance
     self.current["stats"]["endTime"] = time()
