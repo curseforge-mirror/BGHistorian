@@ -111,12 +111,10 @@ function BGH:RefreshLayout()
 
         if (itemIndex <= #rows) then
             button:SetID(itemIndex)
-            -- button.Icon:SetTexture(133308)
-            button.Icon:SetTexture(136628)
+            button.Icon:SetTexture(self:MapIconId(row["mapId"]))
             button.EndTime:SetText(date(L["%F %T"], row["endTime"]))
             button.MapName:SetText(row["mapName"])
-            button.RunTime:SetText(HumanDuration(row["runTime"]))
-            -- button.BattlefieldWinner:SetTexture(130705 - row["battlefieldWinner"])
+            button.RunTime:SetText(self:HumanDuration(row["runTime"]))
             button.BattlefieldWinner:SetTexture(132485 + row["battlefieldWinner"])
             button.KillingBlows:SetText(row["killingBlows"])
             button.HonorableKills:SetText(row["honorableKills"])
@@ -165,7 +163,7 @@ function BGH:Sort(column)
     self:RefreshLayout()
 end
 
-function HumanDuration(miliseconds)
+function BGH:HumanDuration(miliseconds)
     local seconds = math.floor(miliseconds / 1000)
     if seconds < 60 then
         return string.format(L["%is"], seconds)
@@ -176,4 +174,18 @@ function HumanDuration(miliseconds)
     end
     local hours = math.floor(minutes / 60)
     return string.format(L["%ih %im"], hours, (minutes - hours * 60))
+end
+
+function BGH:MapIconId(mapId)
+    if not mapId then
+        return 136628
+    end
+
+    if mapId == 1 then -- Alterac Valley
+        return 133308
+    elseif mapId == 2 then -- Warsong Gulch
+        return 134420
+    elseif mapId == 3 then -- Arathi Basin
+        return 133282
+    end
 end

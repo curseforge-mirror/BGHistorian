@@ -16,8 +16,8 @@ L["%im %is"] = "%im %is"
 L["%is"] = "%is"
 
 L["Alterac Valley"] = "Alterac Valley"
-L["Arathi Basin"] = "Arathi Basin"
 L["Warsong Gulch"] = "Warsong Gulch"
+L["Arathi Basin"] = "Arathi Basin"
 
 L["Show history"] = "Show history"
 L["Options"] = "Options"

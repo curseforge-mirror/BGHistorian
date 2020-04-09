@@ -4,7 +4,6 @@ local BGH = LibStub("AceAddon-3.0"):NewAddon(addonName, "AceConsole-3.0", "AceEv
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName, true)
 local libDBIcon = LibStub("LibDBIcon-1.0")
 
-local debugData = nil
 function BGH:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New(addonName, {
         profile = {
@@ -52,6 +51,7 @@ function BGH:UPDATE_BATTLEFIELD_STATUS(eventName, battleFieldIndex)
         self.current["battleFieldIndex"] = battleFieldIndex
         self.current["stats"]["startTime"] = time()
         self.current["stats"]["mapName"] = mapName
+        self.current["stats"]["mapId"] = self:MapId(mapName)
     elseif self.current["battleFieldIndex"] == battleFieldIndex and self.current["status"] == "active" and status == "none" then
         -- self:Print("Leaving battleground")
         self.current["status"] = status
@@ -157,7 +157,7 @@ function BGH:BuildTable(sortColumn)
     local tbl = {}
     local me = UnitName("player")
 
-    for _, row in ipairs(debugData or self.db.char.history) do
+    for _, row in ipairs(self.db.char.history) do
         local playerScore
         for _, score in ipairs(row["scores"]) do
             if score["name"] == me then
@@ -168,6 +168,7 @@ function BGH:BuildTable(sortColumn)
 
         table.insert(tbl, {
             ["endTime"] = row["endTime"],
+            ["mapId"] = row["mapId"],
             ["mapName"] = row["mapName"],
             ["runTime"] = row["runTime"],
             ["battlefieldWinner"] = row["battlefieldWinner"],
@@ -196,4 +197,16 @@ function BGH:BuildTable(sortColumn)
     end)
 
     return tbl
+end
+
+function BGH:MapId(mapName)
+    if mapName == L["Alterac Valley"] then
+        return 1
+    elseif mapName == L["Warsong Gulch"] then
+        return 2
+    elseif mapName == L["Arathi Basin"] then
+        return 3
+    end
+
+    return nil
 end
