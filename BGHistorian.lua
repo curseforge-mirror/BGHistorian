@@ -22,7 +22,6 @@ function BGH:OnInitialize()
     self:RegisterEvent("UPDATE_BATTLEFIELD_SCORE")
 
 	self:DrawMinimapIcon()
-    -- self:RegisterChatCommand("bgh", "ChatCommandHandler")
     self:RegisterOptionsTable()
 
     self.battlegroundEnded = false
@@ -62,8 +61,6 @@ end
 -- Wowpedia: Fired whenever new battlefield score data has been recieved, this is usually fired after RequestBattlefieldScoreData is called.
 -- This is pretty regular at around 1/sec (maybe linked to Capping ?)
 function BGH:UPDATE_BATTLEFIELD_SCORE(eventName)
-    -- self:Print("UPDATE_BATTLEFIELD_SCORE")
-
     -- Faction/team that has won the battlefield. Results are: nil if nobody has won, 0 for Horde and 1 for Alliance in a battleground
     local battlefieldWinner = GetBattlefieldWinner()
     if battlefieldWinner == nil or self.battlegroundEnded then
@@ -110,7 +107,6 @@ function BGH:UPDATE_BATTLEFIELD_SCORE(eventName)
         for j=1, numStatColumns do
             columnData = GetBattlefieldStatData(i, j)
             battlefieldScore["statData"][j] = columnData
-            -- self:Print("GetBattlefieldStatData", columnData)
         end
 
         table.insert(playersStats, battlefieldScore)
@@ -124,7 +120,6 @@ function BGH:Reset()
     self.db:ResetDB()
     self:Print(L["Database reset"])
 end
-
 
 function BGH:DrawMinimapIcon()
 	libDBIcon:Register(addonName, LibStub("LibDataBroker-1.1"):NewDataObject(addonName,
