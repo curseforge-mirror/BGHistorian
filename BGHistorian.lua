@@ -20,7 +20,7 @@ function BGH:OnInitialize()
 
     self:RegisterChatCommand("bgh", "ChatCommandHandler")
 
-	self:DrawMinimapIcon();
+	self:DrawMinimapIcon()
 
     self.battlegroundEnded = false
     self.sortColumn = "endTime"
@@ -37,7 +37,7 @@ end
 function BGH:UPDATE_BATTLEFIELD_STATUS(eventName, battleFieldIndex)
     -- self:Print("UPDATE_BATTLEFIELD_STATUS", battleFieldIndex)
 
-    local status, mapName = GetBattlefieldStatus(battleFieldIndex);
+    local status, mapName = GetBattlefieldStatus(battleFieldIndex)
     -- status = ["queued", "confirm", "active", "none" = leave] -- active is also triggered on game over
     -- mapName = ["Alterac Valley"]
     -- instanceID = 0 queued & confirm & none / >0 active
@@ -62,7 +62,7 @@ function BGH:UPDATE_BATTLEFIELD_SCORE(eventName)
     -- self:Print("UPDATE_BATTLEFIELD_SCORE")
 
     -- Faction/team that has won the battlefield. Results are: nil if nobody has won, 0 for Horde and 1 for Alliance in a battleground
-    local battlefieldWinner = GetBattlefieldWinner();
+    local battlefieldWinner = GetBattlefieldWinner()
     if battlefieldWinner == nil or self.battlegroundEnded then
         return
     end
@@ -70,9 +70,9 @@ function BGH:UPDATE_BATTLEFIELD_SCORE(eventName)
     self.battlegroundEnded = true
     -- self:Print("Battleground ended")
 
-	local _, _, _, _, numHorde = GetBattlefieldTeamInfo(0);
-    local _, _, _, _, numAlliance = GetBattlefieldTeamInfo(1);
-    local runTime = GetBattlefieldInstanceRunTime(); -- includes prep time
+	local _, _, _, _, numHorde = GetBattlefieldTeamInfo(0)
+    local _, _, _, _, numAlliance = GetBattlefieldTeamInfo(1)
+    local runTime = GetBattlefieldInstanceRunTime() -- includes prep time
     -- self:Print(runTime, numHorde, numAlliance)
 
     self.current["stats"]["battlefieldWinner"] = battlefieldWinner
@@ -82,12 +82,12 @@ function BGH:UPDATE_BATTLEFIELD_SCORE(eventName)
     self.current["stats"]["endTime"] = time()
 
     -- BG specific stats
-	local numStatColumns = GetNumBattlefieldStats();
-    local numScores = GetNumBattlefieldScores();
-    local name, killingBlows, honorableKills, deaths, honorGained, faction, rank, race, class, classToken;
+	local numStatColumns = GetNumBattlefieldStats()
+    local numScores = GetNumBattlefieldScores()
+    local name, killingBlows, honorableKills, deaths, honorGained, faction, rank, race, class, classToken
     local playersStats = {}
     for i=1, numScores do
-        name, killingBlows, honorableKills, deaths, honorGained, faction, rank, race, class, classToken = GetBattlefieldScore(i);
+        name, killingBlows, honorableKills, deaths, honorGained, faction, rank, race, class, classToken = GetBattlefieldScore(i)
         -- self:Print("GetBattlefieldScore", name, killingBlows, honorableKills, deaths, honorGained, faction, rank, race, class, classToken)
         local battlefieldScore = {
             ["name"] = name,
@@ -102,10 +102,10 @@ function BGH:UPDATE_BATTLEFIELD_SCORE(eventName)
             ["classToken"] = classToken,
             ["statData"] = {},
         }
-        -- rankName, rankNumber = GetPVPRankInfo(rank, faction);
+        -- rankName, rankNumber = GetPVPRankInfo(rank, faction)
         local columnData
         for j=1, numStatColumns do
-            columnData = GetBattlefieldStatData(i, j);
+            columnData = GetBattlefieldStatData(i, j)
             battlefieldScore["statData"][j] = columnData
             -- self:Print("GetBattlefieldStatData", columnData)
         end
@@ -140,9 +140,9 @@ function BGH:DrawMinimapIcon()
             BGH:Toggle()
 		end,
 		OnTooltipShow = function(tooltip)
-			tooltip:AddLine("BGHistorian");
+			tooltip:AddLine("BGHistorian")
 		end
-	}), self.db.profile.minimapButton);
+	}), self.db.profile.minimapButton)
 end
 
 function BGH:BuildTable(sortColumn)

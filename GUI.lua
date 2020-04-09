@@ -17,7 +17,7 @@ function BGH:CreateGUI()
 	tableHeader:SetLayout("Flow")
     f:AddChild(tableHeader)
 
-    local btn;
+    local btn
 	btn = AceGUI:Create("InteractiveLabel")
     btn:SetWidth(150)
     btn:SetText(L["Date"])
@@ -89,47 +89,47 @@ function BGH:CreateGUI()
     f:AddChild(scrollContainer)
 
 	scrollFrame = CreateFrame("ScrollFrame", nil, scrollContainer.frame, "BGHHybridScrollFrame")
-	HybridScrollFrame_CreateButtons(scrollFrame, "BGHHybridScrollListItemTemplate");
+	HybridScrollFrame_CreateButtons(scrollFrame, "BGHHybridScrollListItemTemplate")
 	scrollFrame.update = function() BGH:UpdateTableView() end
 end
 
 function BGH:RefreshLayout()
-	local buttons = HybridScrollFrame_GetButtons(scrollFrame);
-    local offset = HybridScrollFrame_GetOffset(scrollFrame);
+	local buttons = HybridScrollFrame_GetButtons(scrollFrame)
+    local offset = HybridScrollFrame_GetOffset(scrollFrame)
 
     f:SetStatusText(string.format(L["Recorded %i battlegrounds"], #rows))
 
 	for buttonIndex = 1, #buttons do
-		local button = buttons[buttonIndex];
-        local itemIndex = buttonIndex + offset;
+		local button = buttons[buttonIndex]
+        local itemIndex = buttonIndex + offset
         local row = rows[itemIndex]
 
         if (itemIndex <= #rows) then
-            button:SetID(itemIndex);
-            -- button.Icon:SetTexture(133308);
-            button.Icon:SetTexture(136628);
-            button.EndTime:SetText(date(L["%F %T"], row["endTime"]));
-            button.MapName:SetText(row["mapName"]);
-            button.RunTime:SetText(HumanDuration(row["runTime"]));
-            -- button.BattlefieldWinner:SetTexture(130705 - row["battlefieldWinner"]);
-            button.BattlefieldWinner:SetTexture(132485 + row["battlefieldWinner"]);
-            button.KillingBlows:SetText(row["killingBlows"]);
-            button.HonorableKills:SetText(row["honorableKills"]);
-            button.Deaths:SetText(row["deaths"]);
-            button.HonorGained:SetText(row["honorGained"]);
+            button:SetID(itemIndex)
+            -- button.Icon:SetTexture(133308)
+            button.Icon:SetTexture(136628)
+            button.EndTime:SetText(date(L["%F %T"], row["endTime"]))
+            button.MapName:SetText(row["mapName"])
+            button.RunTime:SetText(HumanDuration(row["runTime"]))
+            -- button.BattlefieldWinner:SetTexture(130705 - row["battlefieldWinner"])
+            button.BattlefieldWinner:SetTexture(132485 + row["battlefieldWinner"])
+            button.KillingBlows:SetText(row["killingBlows"])
+            button.HonorableKills:SetText(row["honorableKills"])
+            button.Deaths:SetText(row["deaths"])
+            button.HonorGained:SetText(row["honorGained"])
 
-            button:SetWidth(scrollFrame.scrollChild:GetWidth());
-			button:Show();
+            button:SetWidth(scrollFrame.scrollChild:GetWidth())
+			button:Show()
 		else
-			button:Hide();
+			button:Hide()
 		end
 	end
 
-	local buttonHeight = scrollFrame.buttonHeight;
-	local totalHeight = #rows * buttonHeight;
-	local shownHeight = #buttons * buttonHeight;
+	local buttonHeight = scrollFrame.buttonHeight
+	local totalHeight = #rows * buttonHeight
+	local shownHeight = #buttons * buttonHeight
 
-	HybridScrollFrame_Update(scrollFrame, totalHeight, shownHeight);
+	HybridScrollFrame_Update(scrollFrame, totalHeight, shownHeight)
 end
 
 function BGH:Show()
@@ -155,9 +155,9 @@ function BGH:Toggle()
 end
 
 function BGH:Sort(column)
-    scrollFrame:SetVerticalScroll(0);
+    scrollFrame:SetVerticalScroll(0)
     rows = BGH:BuildTable(column)
-    self:RefreshLayout();
+    self:RefreshLayout()
 end
 
 function HumanDuration(miliseconds)
