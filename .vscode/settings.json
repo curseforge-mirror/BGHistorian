@@ -18,5 +18,6 @@
         "HybridScrollFrame_GetOffset",
         "HybridScrollFrame_Update",
         "UnitName"
-    ]
+    ],
+    "Lua.runtime.version": "Lua 5.1"
 }
