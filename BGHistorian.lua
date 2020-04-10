@@ -222,6 +222,18 @@ function BGH:MapId(mapName)
     return nil
 end
 
+function BGH:MapName(mapId)
+    if mapId == 1 then
+        return L["Alterac Valley"]
+    elseif mapId == 2 then
+        return L["Warsong Gulch"]
+    elseif mapId == 3 then
+        return L["Arathi Basin"]
+    end
+
+    return nil
+end
+
 function BGH:OptimizeDatabase()
     for i, row in ipairs(self.db.char.history) do
         if row["battleFieldIndex"] then
