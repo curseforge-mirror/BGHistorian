@@ -1,6 +1,6 @@
 local addonName = "BGHistorian"
 local addonTitle = select(2, GetAddOnInfo(addonName))
-local BGH = LibStub("AceAddon-3.0"):NewAddon(addonName, "AceConsole-3.0", "AceEvent-3.0", "AceSerializer-3.0")
+local BGH = LibStub("AceAddon-3.0"):NewAddon(addonName, "AceConsole-3.0", "AceEvent-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName, true)
 local libDBIcon = LibStub("LibDBIcon-1.0")
 
