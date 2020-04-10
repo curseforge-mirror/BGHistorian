@@ -4,7 +4,7 @@
 
 _This addon is currently a raw alpha, expect issues you may want to [report](https://github.com/ZergRael/BGHistorian/issues)._
 
-![Main window](https://media.forgecdn.net/attachments/285/258/wowscrnshot_040720_202128.jpg "Main window")
+![Main window](https://media.forgecdn.net/attachments/285/688/wowscrnshot_041020_114227-window.jpg "Main window")
 
 BG Historian tries to record every battleground joined and compiles statistics.
 Heavily inspired by [Reflex](https://curseforge.com/wow/addons/reflex-battleground-historian), which has been confirmed to focus only on retail version.
@@ -32,6 +32,9 @@ Ideas for later additions include :
 
 ## Known issues
 
-- Missing icons
 - Missing translations
 - Massive memory usage with lots of recorded battlegrounds
+
+## Contribution
+
+You can help this project by adding [translations](https://www.curseforge.com/wow/addons/bghistorian/localization) and [reporting issues](https://github.com/ZergRael/BGHistorian/issues).
