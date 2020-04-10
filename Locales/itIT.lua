@@ -13,6 +13,8 @@ L["Alterac Valley"] = "Alterac Valley"
 --[[Translation missing --]]
 L["Arathi Basin"] = "Arathi Basin"
 --[[Translation missing --]]
+L["Avg"] = "Avg"
+--[[Translation missing --]]
 L["Battleground"] = "Battleground"
 --[[Translation missing --]]
 L["Battlegrounds records can impact memory usage (0 means unlimited)"] = "Battlegrounds records can impact memory usage (0 means unlimited)"
@@ -37,7 +39,11 @@ L["HK"] = "HK"
 --[[Translation missing --]]
 L["Honor"] = "Honor"
 --[[Translation missing --]]
+L["Honorable Kills"] = "Honorable Kills"
+--[[Translation missing --]]
 L["KB"] = "KB"
+--[[Translation missing --]]
+L["Killing Blows"] = "Killing Blows"
 --[[Translation missing --]]
 L["Left Click"] = "Left Click"
 --[[Translation missing --]]
@@ -57,6 +63,8 @@ L["Right Click"] = "Right Click"
 --[[Translation missing --]]
 L["Show minimap button"] = "Show minimap button"
 --[[Translation missing --]]
+L["Sum"] = "Sum"
+--[[Translation missing --]]
 L["to move this button"] = "to move this button"
 --[[Translation missing --]]
 L["to open options"] = "to open options"
@@ -66,3 +74,5 @@ L["to open the main window"] = "to open the main window"
 L["Warsong Gulch"] = "Warsong Gulch"
 --[[Translation missing --]]
 L["Winner"] = "Winner"
+--[[Translation missing --]]
+L["Winrate"] = "Winrate"
