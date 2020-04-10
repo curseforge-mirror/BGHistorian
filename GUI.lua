@@ -4,7 +4,7 @@ local BGH = LibStub("AceAddon-3.0"):GetAddon(addonName)
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName, true)
 local AceGUI = LibStub("AceGUI-3.0")
 local f, scrollFrame, rows, stats
-local lblWinrate, lblDuration
+local lblWinrate, lblDuration, lblKB, lblHK
 
 function BGH:CreateGUI()
     f = AceGUI:Create("Frame")
@@ -27,7 +27,7 @@ function BGH:CreateGUI()
 
     -- WINRATE
     local block = AceGUI:Create("SimpleGroup")
-    block:SetRelativeWidth(0.5)
+    block:SetRelativeWidth(0.2)
     statsHeader:AddChild(block)
 
 	local lbl = AceGUI:Create("Label")
@@ -43,17 +43,16 @@ function BGH:CreateGUI()
     lblWinrate:SetFontObject(GameFontHighlightLarge)
     lblWinrate:SetText(string.format("%.2f%%", 0))
 	lblWinrate:SetCallback("OnEnter", function() self:ShowTooltip(lblWinrate, {
-        L["Winrate"],
-        string.format("%s %.2f%%", self:MapName(1), stats["winrate"][1] * 100),
-        string.format("%s %.2f%%", self:MapName(2), stats["winrate"][2] * 100),
-        string.format("%s %.2f%%", self:MapName(3), stats["winrate"][3] * 100),
+        string.format("|cff777777%s|r : |cFFCFCFCF%i/%i (%.2f%%)|r", self:MapName(1), stats["victories"][1], stats["count"][1], stats["winrate"][1] * 100),
+        string.format("|cff777777%s|r : |cFFCFCFCF%i/%i (%.2f%%)|r", self:MapName(2), stats["victories"][2], stats["count"][2], stats["winrate"][2] * 100),
+        string.format("|cff777777%s|r : |cFFCFCFCF%i/%i (%.2f%%)|r", self:MapName(3), stats["victories"][3], stats["count"][3], stats["winrate"][3] * 100),
     }) end)
 	lblWinrate:SetCallback("OnLeave", function() self:HideTooltip() end)
     block:AddChild(lblWinrate)
 
     -- DURATION
     block = AceGUI:Create("SimpleGroup")
-    block:SetRelativeWidth(0.5)
+    block:SetRelativeWidth(0.3)
     statsHeader:AddChild(block)
 
 	lbl = AceGUI:Create("Label")
@@ -69,13 +68,62 @@ function BGH:CreateGUI()
     lblDuration:SetFontObject(GameFontHighlightLarge)
     lblDuration:SetText(self:HumanDuration(0))
 	lblDuration:SetCallback("OnEnter", function() self:ShowTooltip(lblDuration, {
-        L["Duration"],
-        string.format("%s %s", self:MapName(1), self:HumanDuration(stats["averageRunTime"][1])),
-        string.format("%s %s", self:MapName(2), self:HumanDuration(stats["averageRunTime"][2])),
-        string.format("%s %s", self:MapName(3), self:HumanDuration(stats["averageRunTime"][3])),
+        string.format("|cff777777%s|r : |cFFCFCFCF%s (%s)|r", self:MapName(1), self:HumanDuration(stats["averageRunTime"][1]), self:HumanDuration(stats["runTime"][1])),
+        string.format("|cff777777%s|r : |cFFCFCFCF%s (%s)|r", self:MapName(2), self:HumanDuration(stats["averageRunTime"][2]), self:HumanDuration(stats["runTime"][2])),
+        string.format("|cff777777%s|r : |cFFCFCFCF%s (%s)|r", self:MapName(3), self:HumanDuration(stats["averageRunTime"][3]), self:HumanDuration(stats["runTime"][3])),
     }) end)
 	lblDuration:SetCallback("OnLeave", function() self:HideTooltip() end)
     block:AddChild(lblDuration)
+
+    -- KB
+    block = AceGUI:Create("SimpleGroup")
+    block:SetRelativeWidth(0.25)
+    statsHeader:AddChild(block)
+
+    lbl = AceGUI:Create("Label")
+    lbl:SetJustifyH("CENTER")
+    lbl:SetFullWidth(true)
+    lbl:SetText(L["Killing Blows"])
+    lbl:SetFontObject(GameFontHighlight)
+    block:AddChild(lbl)
+
+    lblKB = AceGUI:Create("InteractiveLabel")
+    lblKB:SetJustifyH("CENTER")
+    lblKB:SetFullWidth(true)
+    lblKB:SetFontObject(GameFontHighlightLarge)
+    lblKB:SetText('0')
+    lblKB:SetCallback("OnEnter", function() self:ShowTooltip(lblKB, {
+        string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(1), stats["averageKillingBlows"][1], stats["killingBlows"][1]),
+        string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(2), stats["averageKillingBlows"][2], stats["killingBlows"][2]),
+        string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(3), stats["averageKillingBlows"][3], stats["killingBlows"][3]),
+    }) end)
+    lblKB:SetCallback("OnLeave", function() self:HideTooltip() end)
+    block:AddChild(lblKB)
+
+    -- HK
+    block = AceGUI:Create("SimpleGroup")
+    block:SetRelativeWidth(0.25)
+    statsHeader:AddChild(block)
+
+    lbl = AceGUI:Create("Label")
+    lbl:SetJustifyH("CENTER")
+    lbl:SetFullWidth(true)
+    lbl:SetText(L["Honorable Kills"])
+    lbl:SetFontObject(GameFontHighlight)
+    block:AddChild(lbl)
+
+    lblHK = AceGUI:Create("InteractiveLabel")
+    lblHK:SetJustifyH("CENTER")
+    lblHK:SetFullWidth(true)
+    lblHK:SetFontObject(GameFontHighlightLarge)
+    lblHK:SetText('0')
+    lblHK:SetCallback("OnEnter", function() self:ShowTooltip(lblHK, {
+        string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(1), stats["averageHonorableKills"][1], stats["honorableKills"][1]),
+        string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(2), stats["averageHonorableKills"][2], stats["honorableKills"][2]),
+        string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(3), stats["averageHonorableKills"][3], stats["honorableKills"][3]),
+    }) end)
+    lblHK:SetCallback("OnLeave", function() self:HideTooltip() end)
+    block:AddChild(lblHK)
 
     -- TABLE HEADER
     local tableHeader = AceGUI:Create("SimpleGroup")
@@ -202,6 +250,8 @@ function BGH:RefreshLayout()
     f:SetStatusText(string.format(L["Recorded %i battlegrounds"], #rows))
     lblWinrate:SetText(string.format("%i/%i (%.2f%%)", stats["victories"][0], stats["count"][0], stats["winrate"][0] * 100))
     lblDuration:SetText(string.format("%s: %s | %s: %s", L["Avg"], self:HumanDuration(stats["averageRunTime"][0]), L["Sum"], self:HumanDuration(stats["runTime"][0])))
+    lblKB:SetText(string.format("%s: %.1f | %s: %i", L["Avg"], stats["averageKillingBlows"][0], L["Sum"], stats["killingBlows"][0]))
+    lblHK:SetText(string.format("%s: %.1f | %s: %i", L["Avg"], stats["averageHonorableKills"][0], L["Sum"], stats["honorableKills"][0]))
 
 	for buttonIndex = 1, #buttons do
 		local button = buttons[buttonIndex]

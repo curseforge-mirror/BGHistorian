@@ -242,6 +242,30 @@ function BGH:CalcStats(rows)
             [2] = 0,
             [3] = 0,
         },
+        killingBlows = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
+        averageKillingBlows = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
+        honorableKills = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
+        averageHonorableKills = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
     }
 
     if #rows == 0 then
@@ -259,6 +283,8 @@ function BGH:CalcStats(rows)
             end
 
             s["runTime"][id] = s["runTime"][id] + row["runTime"]
+            s["killingBlows"][id] = s["killingBlows"][id] + row["killingBlows"]
+            s["honorableKills"][id] = s["honorableKills"][id] + row["honorableKills"]
         end
     end
 
@@ -268,14 +294,22 @@ function BGH:CalcStats(rows)
             s["count"][0] = s["count"][0] + s["count"][id]
             s["victories"][0] = s["victories"][0] + s["victories"][id]
             s["runTime"][0] = s["runTime"][0] + s["runTime"][id]
+            s["killingBlows"][0] = s["killingBlows"][0] + s["killingBlows"][id]
+            s["honorableKills"][0] = s["honorableKills"][0] + s["honorableKills"][id]
+
             s["winrate"][id] = s["victories"][id] / s["count"][id]
             s["averageRunTime"][id] = s["runTime"][id] / s["count"][id]
+            s["averageKillingBlows"][id] = s["killingBlows"][id] / s["count"][id]
+            s["averageHonorableKills"][id] = s["honorableKills"][id] / s["count"][id]
         end
     end
 
     -- calc overall averages
     s["winrate"][0] = s["victories"][0] / s["count"][0]
     s["averageRunTime"][0] = s["runTime"][0] / s["count"][0]
+    s["averageKillingBlows"][0] = s["killingBlows"][0] / s["count"][0]
+    s["averageHonorableKills"][0] = s["honorableKills"][0] / s["count"][0]
+
     return s
 end
 
