@@ -230,6 +230,18 @@ function BGH:CalcStats()
             [2] = 0,
             [3] = 0,
         },
+        runTime = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
+        averageRunTime = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
     }
 
     if #self.db.char.history == 0 then
@@ -245,6 +257,8 @@ function BGH:CalcStats()
             if row["battlefieldWinner"] == playerFactionId then
                 s["victories"][id] = s["victories"][id] + 1
             end
+
+            s["runTime"][id] = s["runTime"][id] + row["runTime"]
         end
     end
 
@@ -253,12 +267,15 @@ function BGH:CalcStats()
         if s["count"][id] > 0 then
             s["count"][0] = s["count"][0] + s["count"][id]
             s["victories"][0] = s["victories"][0] + s["victories"][id]
+            s["runTime"][0] = s["runTime"][0] + s["runTime"][id]
             s["winrate"][id] = s["victories"][id] / s["count"][id]
+            s["averageRunTime"][id] = s["runTime"][id] / s["count"][id]
         end
     end
 
     -- calc overall averages
     s["winrate"][0] = s["victories"][0] / s["count"][0]
+    s["averageRunTime"][0] = s["runTime"][0] / s["count"][0]
     return s
 end
 

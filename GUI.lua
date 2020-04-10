@@ -4,7 +4,7 @@ local BGH = LibStub("AceAddon-3.0"):GetAddon(addonName)
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName, true)
 local AceGUI = LibStub("AceGUI-3.0")
 local f, scrollFrame, rows, stats
-local lblWinrate
+local lblWinrate, lblDuration
 
 function BGH:CreateGUI()
     f = AceGUI:Create("Frame")
@@ -47,6 +47,29 @@ function BGH:CreateGUI()
     }) end)
 	lblWinrate:SetCallback("OnLeave", function() self:HideTooltip() end)
     block:AddChild(lblWinrate)
+
+    -- DURATION
+    block = AceGUI:Create("SimpleGroup")
+    statsHeader:AddChild(block)
+
+	lbl = AceGUI:Create("Label")
+    lbl:SetJustifyH("CENTER")
+    lbl:SetText(L["Duration"])
+    lbl:SetFontObject(GameFontHighlight)
+    block:AddChild(lbl)
+
+	lblDuration = AceGUI:Create("InteractiveLabel")
+    lblDuration:SetJustifyH("CENTER")
+    lblDuration:SetFontObject(GameFontHighlightLarge)
+    lblDuration:SetText(self:HumanDuration(0))
+	lblDuration:SetCallback("OnEnter", function() self:ShowTooltip(lblDuration, {
+        string.format("%s", L["Duration"]),
+        string.format("%s %s", self:MapName(1), self:HumanDuration(stats["averageRunTime"][1])),
+        string.format("%s %s", self:MapName(2), self:HumanDuration(stats["averageRunTime"][2])),
+        string.format("%s %s", self:MapName(3), self:HumanDuration(stats["averageRunTime"][3])),
+    }) end)
+	lblDuration:SetCallback("OnLeave", function() self:HideTooltip() end)
+    block:AddChild(lblDuration)
 
     -- TABLE HEADER
     local tableHeader = AceGUI:Create("SimpleGroup")
@@ -172,6 +195,7 @@ function BGH:RefreshLayout()
 
     f:SetStatusText(string.format(L["Recorded %i battlegrounds"], #rows))
     lblWinrate:SetText(string.format("%.2f%%", stats["winrate"][0] * 100))
+    lblDuration:SetText(self:HumanDuration(stats["averageRunTime"][0]))
 
 	for buttonIndex = 1, #buttons do
 		local button = buttons[buttonIndex]
