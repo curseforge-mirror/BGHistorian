@@ -27,16 +27,19 @@ function BGH:CreateGUI()
 
     -- WINRATE
     local block = AceGUI:Create("SimpleGroup")
+    block:SetRelativeWidth(0.5)
     statsHeader:AddChild(block)
 
 	local lbl = AceGUI:Create("Label")
     lbl:SetJustifyH("CENTER")
+    lbl:SetFullWidth(true)
     lbl:SetText(L["Winrate"])
     lbl:SetFontObject(GameFontHighlight)
     block:AddChild(lbl)
 
 	lblWinrate = AceGUI:Create("InteractiveLabel")
     lblWinrate:SetJustifyH("CENTER")
+    lblWinrate:SetFullWidth(true)
     lblWinrate:SetFontObject(GameFontHighlightLarge)
     lblWinrate:SetText(string.format("%.2f%%", 0))
 	lblWinrate:SetCallback("OnEnter", function() self:ShowTooltip(lblWinrate, {
@@ -50,16 +53,19 @@ function BGH:CreateGUI()
 
     -- DURATION
     block = AceGUI:Create("SimpleGroup")
+    block:SetRelativeWidth(0.5)
     statsHeader:AddChild(block)
 
 	lbl = AceGUI:Create("Label")
     lbl:SetJustifyH("CENTER")
+    lbl:SetFullWidth(true)
     lbl:SetText(L["Duration"])
     lbl:SetFontObject(GameFontHighlight)
     block:AddChild(lbl)
 
 	lblDuration = AceGUI:Create("InteractiveLabel")
     lblDuration:SetJustifyH("CENTER")
+    lblDuration:SetFullWidth(true)
     lblDuration:SetFontObject(GameFontHighlightLarge)
     lblDuration:SetText(self:HumanDuration(0))
 	lblDuration:SetCallback("OnEnter", function() self:ShowTooltip(lblDuration, {
