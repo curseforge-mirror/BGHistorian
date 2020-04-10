@@ -24,16 +24,18 @@ Mostly working parts :
 
 Ideas for later additions include :
 
-- Display individual battleground info
-- Display weekend current weekend battleground
-- Record reputation gains
-- Record damage & heals
-- Display known best performers at the start of battleground
+- [Display global stats in main window header](https://github.com/ZergRael/BGHistorian/issues/8)
+- [Display individual battleground info](https://github.com/ZergRael/BGHistorian/issues/7)
+- [Display weekend current weekend battleground](https://github.com/ZergRael/BGHistorian/issues/4)
+- [Record reputation gains](https://github.com/ZergRael/BGHistorian/issues/3)
+- [Record real honor gains](https://github.com/ZergRael/BGHistorian/issues/2)
+- [Record damage & heals](https://github.com/ZergRael/BGHistorian/issues/1)
+- [Display known best performers at the start of battleground](https://github.com/ZergRael/BGHistorian/issues/6)
 
 ## Known issues
 
-- Missing translations
-- Massive memory usage with lots of recorded battlegrounds
+- Missing [translations](https://www.curseforge.com/wow/addons/bghistorian/localization)
+- [Massive memory usage with lots of recorded battlegrounds](https://github.com/ZergRael/BGHistorian/issues/5)
 
 ## Contribution
 
