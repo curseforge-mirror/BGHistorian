@@ -3,7 +3,8 @@ local addonTitle = select(2, GetAddOnInfo(addonName))
 local BGH = LibStub("AceAddon-3.0"):GetAddon(addonName)
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName, true)
 local AceGUI = LibStub("AceGUI-3.0")
-local f, scrollFrame, rows
+local f, scrollFrame, rows, stats
+local lblWinrate
 
 function BGH:CreateGUI()
     f = AceGUI:Create("Frame")
@@ -18,6 +19,36 @@ function BGH:CreateGUI()
     f:SetStatusText("Status Bar")
     f:SetLayout("Flow")
 
+    -- STATS HEADER
+    local statsHeader = AceGUI:Create("SimpleGroup")
+	statsHeader:SetFullWidth(true)
+	statsHeader:SetLayout("Flow")
+    f:AddChild(statsHeader)
+
+    -- WINRATE
+    local block = AceGUI:Create("SimpleGroup")
+    statsHeader:AddChild(block)
+
+	local lbl = AceGUI:Create("Label")
+    lbl:SetJustifyH("CENTER")
+    lbl:SetText(L["Winrate"])
+    lbl:SetFontObject(GameFontHighlight)
+    block:AddChild(lbl)
+
+	lblWinrate = AceGUI:Create("InteractiveLabel")
+    lblWinrate:SetJustifyH("CENTER")
+    lblWinrate:SetFontObject(GameFontHighlightLarge)
+    lblWinrate:SetText(string.format("%.2f%%", 0))
+	lblWinrate:SetCallback("OnEnter", function() self:ShowTooltip(lblWinrate, {
+        string.format("%s %i/%i", L["Winrate"], stats["victories"][0], stats["count"][0]),
+        string.format("%s %.2f%%", self:MapName(1), stats["winrate"][1] * 100),
+        string.format("%s %.2f%%", self:MapName(2), stats["winrate"][2] * 100),
+        string.format("%s %.2f%%", self:MapName(3), stats["winrate"][3] * 100),
+    }) end)
+	lblWinrate:SetCallback("OnLeave", function() self:HideTooltip() end)
+    block:AddChild(lblWinrate)
+
+    -- TABLE HEADER
     local tableHeader = AceGUI:Create("SimpleGroup")
 	tableHeader:SetFullWidth(true)
 	tableHeader:SetLayout("Flow")
@@ -123,6 +154,7 @@ function BGH:CreateGUI()
     margin:SetWidth(4)
     tableHeader:AddChild(margin)
 
+    -- TABLE
     local scrollContainer = AceGUI:Create("SimpleGroup")
     scrollContainer:SetFullWidth(true)
     scrollContainer:SetFullHeight(true)
@@ -139,6 +171,7 @@ function BGH:RefreshLayout()
     local offset = HybridScrollFrame_GetOffset(scrollFrame)
 
     f:SetStatusText(string.format(L["Recorded %i battlegrounds"], #rows))
+    lblWinrate:SetText(string.format("%.2f%%", stats["winrate"][0] * 100))
 
 	for buttonIndex = 1, #buttons do
 		local button = buttons[buttonIndex]
@@ -177,6 +210,8 @@ function BGH:Show()
     end
 
     rows = BGH:BuildTable()
+    stats = BGH:CalcStats()
+
     f:Show()
     self:RefreshLayout()
 end

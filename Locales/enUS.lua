@@ -17,6 +17,9 @@ L["%ih %im"] = "%ih %im" -- Duration in hours and minutes
 L["%im %is"] = "%im %is" -- Duration in minutes and seconds
 L["%is"] = "%is" -- Duration in seconds only
 
+-- Stats
+L["Winrate"] = "Winrate"
+
 -- Battlegrounds
 L["Alterac Valley"] = "Alterac Valley"
 L["Warsong Gulch"] = "Warsong Gulch"

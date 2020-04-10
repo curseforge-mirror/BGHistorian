@@ -210,6 +210,58 @@ function BGH:BuildTable(sortColumn)
     return tbl
 end
 
+function BGH:CalcStats()
+    local s = {
+        count = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
+        victories = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
+        winrate = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
+    }
+
+    if #self.db.char.history == 0 then
+        return s
+    end
+
+    local playerFactionId = (UnitFactionGroup("player") == "Alliance" and 1 or 0)
+    for _, row in ipairs(self.db.char.history) do
+        local id = row["mapId"]
+        if id > 0 then
+            s["count"][id] = s["count"][id] + 1
+
+            if row["battlefieldWinner"] == playerFactionId then
+                s["victories"][id] = s["victories"][id] + 1
+            end
+        end
+    end
+
+    -- summarize overall values
+    for id = 1, 3 do
+        if s["count"][id] > 0 then
+            s["count"][0] = s["count"][0] + s["count"][id]
+            s["victories"][0] = s["victories"][0] + s["victories"][id]
+            s["winrate"][id] = s["victories"][id] / s["count"][id]
+        end
+    end
+
+    -- calc overall averages
+    s["winrate"][0] = s["victories"][0] / s["count"][0]
+    return s
+end
+
 function BGH:MapId(mapName)
     if mapName == L["Alterac Valley"] then
         return 1
