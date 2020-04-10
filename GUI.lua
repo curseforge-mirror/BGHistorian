@@ -240,7 +240,7 @@ function BGH:Show()
     end
 
     rows = BGH:BuildTable()
-    stats = BGH:CalcStats()
+    stats = BGH:CalcStats(rows)
 
     f:Show()
     self:RefreshLayout()

@@ -210,7 +210,7 @@ function BGH:BuildTable(sortColumn)
     return tbl
 end
 
-function BGH:CalcStats()
+function BGH:CalcStats(rows)
     local s = {
         count = {
             [0] = 0,
@@ -244,12 +244,12 @@ function BGH:CalcStats()
         },
     }
 
-    if #self.db.char.history == 0 then
+    if #rows == 0 then
         return s
     end
 
     local playerFactionId = (UnitFactionGroup("player") == "Alliance" and 1 or 0)
-    for _, row in ipairs(self.db.char.history) do
+    for _, row in ipairs(rows) do
         local id = row["mapId"]
         if id > 0 then
             s["count"][id] = s["count"][id] + 1
