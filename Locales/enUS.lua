@@ -16,6 +16,9 @@ L["%F %T"] = "%F %T" -- Date format
 L["%ih %im"] = "%ih %im" -- Duration in hours and minutes
 L["%im %is"] = "%im %is" -- Duration in minutes and seconds
 L["%is"] = "%is" -- Duration in seconds only
+-- Count
+L["Avg"] = "Avg" -- Average
+L["Sum"] = "Sum"
 
 -- Stats
 L["Winrate"] = "Winrate"

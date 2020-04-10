@@ -43,7 +43,7 @@ function BGH:CreateGUI()
     lblWinrate:SetFontObject(GameFontHighlightLarge)
     lblWinrate:SetText(string.format("%.2f%%", 0))
 	lblWinrate:SetCallback("OnEnter", function() self:ShowTooltip(lblWinrate, {
-        string.format("%s %i/%i", L["Winrate"], stats["victories"][0], stats["count"][0]),
+        L["Winrate"],
         string.format("%s %.2f%%", self:MapName(1), stats["winrate"][1] * 100),
         string.format("%s %.2f%%", self:MapName(2), stats["winrate"][2] * 100),
         string.format("%s %.2f%%", self:MapName(3), stats["winrate"][3] * 100),
@@ -69,7 +69,7 @@ function BGH:CreateGUI()
     lblDuration:SetFontObject(GameFontHighlightLarge)
     lblDuration:SetText(self:HumanDuration(0))
 	lblDuration:SetCallback("OnEnter", function() self:ShowTooltip(lblDuration, {
-        string.format("%s", L["Duration"]),
+        L["Duration"],
         string.format("%s %s", self:MapName(1), self:HumanDuration(stats["averageRunTime"][1])),
         string.format("%s %s", self:MapName(2), self:HumanDuration(stats["averageRunTime"][2])),
         string.format("%s %s", self:MapName(3), self:HumanDuration(stats["averageRunTime"][3])),
@@ -200,8 +200,8 @@ function BGH:RefreshLayout()
     local offset = HybridScrollFrame_GetOffset(scrollFrame)
 
     f:SetStatusText(string.format(L["Recorded %i battlegrounds"], #rows))
-    lblWinrate:SetText(string.format("%.2f%%", stats["winrate"][0] * 100))
-    lblDuration:SetText(self:HumanDuration(stats["averageRunTime"][0]))
+    lblWinrate:SetText(string.format("%i/%i (%.2f%%)", stats["victories"][0], stats["count"][0], stats["winrate"][0] * 100))
+    lblDuration:SetText(string.format("%s: %s | %s: %s", L["Avg"], self:HumanDuration(stats["averageRunTime"][0]), L["Sum"], self:HumanDuration(stats["runTime"][0])))
 
 	for buttonIndex = 1, #buttons do
 		local button = buttons[buttonIndex]
