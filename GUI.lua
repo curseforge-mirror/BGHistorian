@@ -225,3 +225,20 @@ function BGH:MapIconId(mapId)
         return 133282
     end
 end
+
+function BGH:ShowTooltip(owner, lines)
+    AceGUI.tooltip:SetOwner(owner.frame, "ANCHOR_BOTTOMLEFT")
+    AceGUI.tooltip:ClearLines()
+    for i, line in ipairs(lines) do
+        if i == 1 then
+            AceGUI.tooltip:AddLine(line)
+        else
+            AceGUI.tooltip:AddLine(line, 1, 1, 1)
+        end
+    end
+    AceGUI.tooltip:Show()
+end
+
+function BGH:HideTooltip()
+    AceGUI.tooltip:Hide()
+end
