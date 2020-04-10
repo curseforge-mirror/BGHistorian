@@ -210,6 +210,109 @@ function BGH:BuildTable(sortColumn)
     return tbl
 end
 
+function BGH:CalcStats(rows)
+    local s = {
+        count = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
+        victories = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
+        winrate = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
+        runTime = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
+        averageRunTime = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
+        killingBlows = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
+        averageKillingBlows = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
+        honorableKills = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
+        averageHonorableKills = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+        },
+    }
+
+    if #rows == 0 then
+        return s
+    end
+
+    local playerFactionId = (UnitFactionGroup("player") == "Alliance" and 1 or 0)
+    for _, row in ipairs(rows) do
+        local id = row["mapId"]
+        if id > 0 then
+            s["count"][id] = s["count"][id] + 1
+
+            if row["battlefieldWinner"] == playerFactionId then
+                s["victories"][id] = s["victories"][id] + 1
+            end
+
+            s["runTime"][id] = s["runTime"][id] + row["runTime"]
+            s["killingBlows"][id] = s["killingBlows"][id] + row["killingBlows"]
+            s["honorableKills"][id] = s["honorableKills"][id] + row["honorableKills"]
+        end
+    end
+
+    -- summarize overall values
+    for id = 1, 3 do
+        if s["count"][id] > 0 then
+            s["count"][0] = s["count"][0] + s["count"][id]
+            s["victories"][0] = s["victories"][0] + s["victories"][id]
+            s["runTime"][0] = s["runTime"][0] + s["runTime"][id]
+            s["killingBlows"][0] = s["killingBlows"][0] + s["killingBlows"][id]
+            s["honorableKills"][0] = s["honorableKills"][0] + s["honorableKills"][id]
+
+            s["winrate"][id] = s["victories"][id] / s["count"][id]
+            s["averageRunTime"][id] = s["runTime"][id] / s["count"][id]
+            s["averageKillingBlows"][id] = s["killingBlows"][id] / s["count"][id]
+            s["averageHonorableKills"][id] = s["honorableKills"][id] / s["count"][id]
+        end
+    end
+
+    -- calc overall averages
+    s["winrate"][0] = s["victories"][0] / s["count"][0]
+    s["averageRunTime"][0] = s["runTime"][0] / s["count"][0]
+    s["averageKillingBlows"][0] = s["killingBlows"][0] / s["count"][0]
+    s["averageHonorableKills"][0] = s["honorableKills"][0] / s["count"][0]
+
+    return s
+end
+
 function BGH:MapId(mapName)
     if mapName == L["Alterac Valley"] then
         return 1
@@ -217,6 +320,18 @@ function BGH:MapId(mapName)
         return 2
     elseif mapName == L["Arathi Basin"] then
         return 3
+    end
+
+    return nil
+end
+
+function BGH:MapName(mapId)
+    if mapId == 1 then
+        return L["Alterac Valley"]
+    elseif mapId == 2 then
+        return L["Warsong Gulch"]
+    elseif mapId == 3 then
+        return L["Arathi Basin"]
     end
 
     return nil

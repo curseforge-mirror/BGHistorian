@@ -5,7 +5,9 @@ L["Date"] = "Date"
 L["Battleground"] = "Battleground"
 L["Duration"] = "Duration"
 L["Winner"] = "Winner"
+L["Killing Blows"] = "Killing Blows"
 L["KB"] = "KB" -- Killing Blows
+L["Honorable Kills"] = "Honorable Kills"
 L["HK"] = "HK" -- Honorable Kills
 L["Deaths"] = "Deaths"
 L["Honor"] = "Honor" -- Bonus Honor
@@ -16,6 +18,12 @@ L["%F %T"] = "%F %T" -- Date format
 L["%ih %im"] = "%ih %im" -- Duration in hours and minutes
 L["%im %is"] = "%im %is" -- Duration in minutes and seconds
 L["%is"] = "%is" -- Duration in seconds only
+-- Count
+L["Avg"] = "Avg" -- Average
+L["Sum"] = "Sum"
+
+-- Stats
+L["Winrate"] = "Winrate"
 
 -- Battlegrounds
 L["Alterac Valley"] = "Alterac Valley"

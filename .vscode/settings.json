@@ -20,7 +20,10 @@
         "UnitName",
         "GetAddOnInfo",
         "InterfaceOptionsFrame_OpenToCategory",
-        "UISpecialFrames"
+        "UISpecialFrames",
+        "GameFontHighlight",
+        "GameFontHighlightLarge",
+        "UnitFactionGroup"
     ],
     "Lua.runtime.version": "Lua 5.1"
 }
