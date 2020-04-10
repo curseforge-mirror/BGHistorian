@@ -8,6 +8,7 @@ local f, scrollFrame, rows
 function BGH:CreateGUI()
     f = AceGUI:Create("Frame")
     f:Hide()
+    f:EnableResize(false)
 
     -- f:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
     f:SetTitle(addonTitle)
