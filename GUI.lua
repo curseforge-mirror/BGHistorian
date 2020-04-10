@@ -292,7 +292,7 @@ function BGH:MapIconId(mapId)
 end
 
 function BGH:ShowTooltip(owner, lines)
-    AceGUI.tooltip:SetOwner(owner.frame, "ANCHOR_BOTTOMLEFT")
+    AceGUI.tooltip:SetOwner(owner.frame, "ANCHOR_TOP")
     AceGUI.tooltip:ClearLines()
     for i, line in ipairs(lines) do
         AceGUI.tooltip:AddLine(line)
