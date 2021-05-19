@@ -11,6 +11,8 @@ L["%is"] = "%is"
 L["Alterac Valley"] = "Vale Alterac"
 L["Arathi Basin"] = "Bacia Arathi"
 --[[Translation missing --]]
+L["Eye of the Storm"] = "Eye of the Storm"
+--[[Translation missing --]]
 L["Avg"] = "Avg"
 --[[Translation missing --]]
 L["Battleground"] = "Battleground"
@@ -73,3 +75,11 @@ L["Warsong Gulch"] = "Ravina Brado Guerreiro"
 L["Winner"] = "Winner"
 --[[Translation missing --]]
 L["Winrate"] = "Winrate"
+--[[Translation missing --]]
+L["Damage Done"] = "Damage Done"
+--[[Translation missing --]]
+L["Damage"] = "Damage"
+--[[Translation missing --]]
+L["Healing Done"] = "Healing Done"
+--[[Translation missing --]]
+L["Healing"] = "Healing"

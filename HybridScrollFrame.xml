@@ -30,7 +30,7 @@
 					</Anchors>
                 </FontString>
                 <FontString parentKey="RunTime" inherits="GameFontHighlightSmall" justifyH="LEFT">
-                    <Size x="104"/>
+                    <Size x="98"/>
 					<Anchors>
 						<Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.MapName"/>
 					</Anchors>
@@ -41,28 +41,34 @@
 						<Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.RunTime"/>
 					</Anchors>
                 </Texture>
-                <FontString parentKey="KillingBlows" inherits="GameFontHighlightSmall" justifyH="RIGHT">
-                    <Size x="40"/>
+                <FontString parentKey="KillingBlows" inherits="GameFontHighlightSmall" justifyH="LEFT">
+                    <Size x="36"/>
 					<Anchors>
-						<Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.BattlefieldWinner" x="8"/>
+						<Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.BattlefieldWinner" x="44"/>
 					</Anchors>
                 </FontString>
-                <FontString parentKey="HonorableKills" inherits="GameFontHighlightSmall" justifyH="RIGHT">
+                <FontString parentKey="Damage" inherits="GameFontHighlightSmall" justifyH="LEFT">
+                    <Size x="90"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.KillingBlows" x="4"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="Healing" inherits="GameFontHighlightSmall" justifyH="LEFT">
+                    <Size x="90"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.Damage" x="4"/>
+                    </Anchors>
+                </FontString>
+                <FontString parentKey="HonorableKills" inherits="GameFontHighlightSmall" justifyH="LEFT">
                     <Size x="40"/>
 					<Anchors>
-						<Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.KillingBlows" x="4"/>
+						<Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.Healing" x="4"/>
 					</Anchors>
                 </FontString>
-                <FontString parentKey="Deaths" inherits="GameFontHighlightSmall" justifyH="RIGHT">
+                <FontString parentKey="Deaths" inherits="GameFontHighlightSmall" justifyH="LEFT">
                     <Size x="40"/>
 					<Anchors>
 						<Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.HonorableKills" x="4"/>
-					</Anchors>
-                </FontString>
-                <FontString parentKey="HonorGained" inherits="GameFontHighlightSmall" justifyH="RIGHT">
-                    <Size x="44"/>
-					<Anchors>
-						<Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.Deaths" x="4"/>
 					</Anchors>
                 </FontString>
             </Layer>

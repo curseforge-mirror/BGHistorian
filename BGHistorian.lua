@@ -37,8 +37,6 @@ end
 -- Wowpedia: Fired whenever joining a queue, leaving a queue, battlefield to join is changed, when you can join a battlefield, or if somebody wins the battleground.
 -- Fired at enter BG | reload in BG | on game over | leave BG | queue BG | regularly while in queue | queue pops
 function BGH:UPDATE_BATTLEFIELD_STATUS(eventName, battleFieldIndex)
-    -- self:Print("UPDATE_BATTLEFIELD_STATUS", battleFieldIndex)
-
     local status, mapName = GetBattlefieldStatus(battleFieldIndex)
     -- status = ["queued", "confirm", "active", "none" = leave] -- active is also triggered on game over
     -- mapName = ["Alterac Valley"]
@@ -46,7 +44,6 @@ function BGH:UPDATE_BATTLEFIELD_STATUS(eventName, battleFieldIndex)
     -- self:Print("GetBattlefieldStatus", status, mapName, instanceID, asGroup)
 
     if self.current["status"] == "none" and status == "active" then
-        -- self:Print("Entering battleground")
         self.battlegroundEnded = false
         self.current["status"] = status
         self.current["battleFieldIndex"] = battleFieldIndex
@@ -54,7 +51,6 @@ function BGH:UPDATE_BATTLEFIELD_STATUS(eventName, battleFieldIndex)
         self.current["stats"]["mapName"] = mapName
         self.current["stats"]["mapId"] = self:MapId(mapName)
     elseif self.current["battleFieldIndex"] == battleFieldIndex and self.current["status"] == "active" and status == "none" then
-        -- self:Print("Leaving battleground")
         self.current["status"] = status
     end
 end
@@ -69,8 +65,6 @@ function BGH:UPDATE_BATTLEFIELD_SCORE(eventName)
     end
 
     self.battlegroundEnded = true
-    -- self:Print("Battleground ended")
-
     self:RecordBattleground()
 end
 
@@ -79,44 +73,31 @@ function BGH:RecordBattleground()
     local _, _, _, _, numAlliance = GetBattlefieldTeamInfo(1)
 
     self.current["stats"]["battlefieldWinner"] = GetBattlefieldWinner()
-    self.current["stats"]["runTime"] = GetBattlefieldInstanceRunTime() -- includes prep time
+    self.current["stats"]["endTime"] = time()
     self.current["stats"]["numHorde"] = numHorde
     self.current["stats"]["numAlliance"] = numAlliance
-    self.current["stats"]["endTime"] = time()
+    
 
     -- BG specific stats
 	local numStatColumns = GetNumBattlefieldStats()
     local numScores = GetNumBattlefieldScores()
-    local name, killingBlows, honorableKills, deaths, honorGained, faction, rank, race, class, classToken
-    local playersStats = {}
+    local playerScore
     for i=1, numScores do
-        name, killingBlows, honorableKills, deaths, honorGained, faction, rank, race, class, classToken = GetBattlefieldScore(i)
-        -- self:Print("GetBattlefieldScore", name, killingBlows, honorableKills, deaths, honorGained, faction, rank, race, class, classToken)
-        local battlefieldScore = {
-            ["name"] = name,
-            ["killingBlows"] = killingBlows,
-            ["honorableKills"] = honorableKills,
-            ["deaths"] = deaths,
-            ["honorGained"] = honorGained,
-            ["faction"] = faction,
-            ["rank"] = rank,
-            ["race"] = race,
-            ["class"] = class,
-            ["classToken"] = classToken,
-            ["statData"] = {},
-        }
-        -- rankName, rankNumber = GetPVPRankInfo(rank, faction)
-        local columnData
-        for j=1, numStatColumns do
-            columnData = GetBattlefieldStatData(i, j)
-            battlefieldScore["statData"][j] = columnData
+        name, killingBlows, honorableKills, deaths, honorGained, _, _, _, _, _, damageDone, healingDone = GetBattlefieldScore(i)
+        if name == UnitName("player") then
+            playerScore = {
+                ["name"] = name,
+                ["killingBlows"] = killingBlows,
+                ["honorableKills"] = honorableKills,
+                ["deaths"] = deaths,
+                ["honorGained"] = honorGained,
+                ["damageDone"] = damageDone,
+                ["healingDone"] = healingDone,
+            }
         end
-
-        table.insert(playersStats, battlefieldScore)
     end
-
-    self.current["stats"]["scores"] = playersStats
-    table.insert(self.db.char.history, self.current["stats"])
+    self.current["stats"]["score"] = playerScore
+    table.insert(self.db.char.history, self:DeepCopy(self.current["stats"], {}))
 
     if self.db.profile.maxHistory > 0 then
         -- Shift array until we get under threshold
@@ -124,6 +105,27 @@ function BGH:RecordBattleground()
             table.remove(self.db.char.history, 1)
         end
     end
+end
+
+function BGH:DeepCopy(orig, copies)
+    copies = copies or {}
+    local orig_type = type(orig)
+    local copy
+    if orig_type == 'table' then
+        if copies[orig] then
+            copy = copies[orig]
+        else
+            copy = {}
+            copies[orig] = copy
+            for orig_key, orig_value in next, orig, nil do
+                copy[self:DeepCopy(orig_key, copies)] = self:DeepCopy(orig_value, copies)
+            end
+            setmetatable(copy, self:DeepCopy(getmetatable(orig), copies))
+        end
+    else -- number, string, boolean, etc
+        copy = orig
+    end
+    return copy
 end
 
 function BGH:ResetDatabase()
@@ -166,27 +168,20 @@ end
 function BGH:BuildTable(sortColumn)
     -- self:Print("Rebuilding data table")
     local tbl = {}
-    local me = UnitName("player")
 
     for _, row in ipairs(self.db.char.history) do
-        local playerScore
-        for _, score in ipairs(row["scores"]) do
-            if score["name"] == me then
-                playerScore = score
-                break
-            end
-        end
-
         table.insert(tbl, {
             ["endTime"] = row["endTime"],
             ["mapId"] = row["mapId"],
             ["mapName"] = row["mapName"],
-            ["runTime"] = row["runTime"],
+            ["runTime"] = (row["endTime"] - row["startTime"]),
             ["battlefieldWinner"] = row["battlefieldWinner"],
-            ["killingBlows"] = playerScore["killingBlows"],
-            ["honorableKills"] = playerScore["honorableKills"],
-            ["deaths"] = playerScore["deaths"],
-            ["honorGained"] = playerScore["honorGained"],
+            ["killingBlows"] = row["score"]["killingBlows"],
+            ["honorableKills"] = row["score"]["honorableKills"],
+            ["deaths"] = row["score"]["deaths"],
+            ["honorGained"] = row["score"]["honorGained"],
+            ["damageDone"] = row["score"]["damageDone"],
+            ["healingDone"] = row["score"]["healingDone"],
         })
     end
 
@@ -217,54 +212,91 @@ function BGH:CalcStats(rows)
             [1] = 0,
             [2] = 0,
             [3] = 0,
+            [4] = 0,
         },
         victories = {
             [0] = 0,
             [1] = 0,
             [2] = 0,
             [3] = 0,
+            [4] = 0,
         },
         winrate = {
             [0] = 0,
             [1] = 0,
             [2] = 0,
             [3] = 0,
+            [4] = 0,
         },
         runTime = {
             [0] = 0,
             [1] = 0,
             [2] = 0,
             [3] = 0,
+            [4] = 0,
         },
         averageRunTime = {
             [0] = 0,
             [1] = 0,
             [2] = 0,
             [3] = 0,
+            [4] = 0,
         },
         killingBlows = {
             [0] = 0,
             [1] = 0,
             [2] = 0,
             [3] = 0,
+            [4] = 0,
         },
         averageKillingBlows = {
             [0] = 0,
             [1] = 0,
             [2] = 0,
             [3] = 0,
+            [4] = 0,
         },
         honorableKills = {
             [0] = 0,
             [1] = 0,
             [2] = 0,
             [3] = 0,
+            [4] = 0,
         },
         averageHonorableKills = {
             [0] = 0,
             [1] = 0,
             [2] = 0,
             [3] = 0,
+            [4] = 0,
+        },
+        damageDone = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+            [4] = 0,
+        },
+        averageDamageDone = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+            [4] = 0,
+        },
+        healingDone = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+            [4] = 0,
+        },
+        averageHealingDone = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+            [4] = 0,
         },
     }
 
@@ -285,22 +317,28 @@ function BGH:CalcStats(rows)
             s["runTime"][id] = s["runTime"][id] + row["runTime"]
             s["killingBlows"][id] = s["killingBlows"][id] + row["killingBlows"]
             s["honorableKills"][id] = s["honorableKills"][id] + row["honorableKills"]
+            s["damageDone"][id] = s["damageDone"][id] + row["damageDone"]
+            s["healingDone"][id] = s["healingDone"][id] + row["healingDone"]
         end
     end
 
     -- summarize overall values
-    for id = 1, 3 do
+    for id = 1, 4 do
         if s["count"][id] > 0 then
             s["count"][0] = s["count"][0] + s["count"][id]
             s["victories"][0] = s["victories"][0] + s["victories"][id]
             s["runTime"][0] = s["runTime"][0] + s["runTime"][id]
             s["killingBlows"][0] = s["killingBlows"][0] + s["killingBlows"][id]
             s["honorableKills"][0] = s["honorableKills"][0] + s["honorableKills"][id]
+            s["damageDone"][0] = s["damageDone"][0] + s["damageDone"][id]
+            s["healingDone"][0] = s["healingDone"][0] + s["healingDone"][id]
 
             s["winrate"][id] = s["victories"][id] / s["count"][id]
             s["averageRunTime"][id] = s["runTime"][id] / s["count"][id]
             s["averageKillingBlows"][id] = s["killingBlows"][id] / s["count"][id]
             s["averageHonorableKills"][id] = s["honorableKills"][id] / s["count"][id]
+            s["averageDamageDone"][id] = s["damageDone"][id] / s["count"][id]
+            s["averageHealingDone"][id] = s["healingDone"][id] / s["count"][id]
         end
     end
 
@@ -309,7 +347,8 @@ function BGH:CalcStats(rows)
     s["averageRunTime"][0] = s["runTime"][0] / s["count"][0]
     s["averageKillingBlows"][0] = s["killingBlows"][0] / s["count"][0]
     s["averageHonorableKills"][0] = s["honorableKills"][0] / s["count"][0]
-
+    s["averageDamageDone"][0] = s["damageDone"][0] / s["count"][0]
+    s["averageHealingDone"][0] = s["healingDone"][0] / s["count"][0]
     return s
 end
 
@@ -320,6 +359,8 @@ function BGH:MapId(mapName)
         return 2
     elseif mapName == L["Arathi Basin"] then
         return 3
+    elseif mapName == L["Eye of the Storm"] then
+        return 4
     end
 
     return nil
@@ -332,6 +373,8 @@ function BGH:MapName(mapId)
         return L["Warsong Gulch"]
     elseif mapId == 3 then
         return L["Arathi Basin"]
+    elseif mapId == 4 then
+        return L["Eye of the Storm"]
     end
 
     return nil

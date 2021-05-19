@@ -6,6 +6,8 @@ L["%im %is"] = "%im %is"
 L["%is"] = "%is"
 L["Alterac Valley"] = "Vallée d'Alterac"
 L["Arathi Basin"] = "Bassin d'Arathi"
+--[[Translation missing --]]
+L["Eye of the Storm"] = "Eye of the Storm"
 L["Avg"] = "Moy"
 L["Battleground"] = "Champ de bataille"
 L["Battlegrounds records can impact memory usage (0 means unlimited)"] = "Les enregistrements de champs de bataille peuvent occuper un espace mémoire important (0 = illimité)"
@@ -38,3 +40,11 @@ L["to open the main window"] = "pour ouvrir la fenêtre principale"
 L["Warsong Gulch"] = "Goulet des Warsong"
 L["Winner"] = "Gagnant"
 L["Winrate"] = "Taux de victoires"
+--[[Translation missing --]]
+L["Damage Done"] = "Damage Done"
+--[[Translation missing --]]
+L["Damage"] = "Damage"
+--[[Translation missing --]]
+L["Healing Done"] = "Healing Done"
+--[[Translation missing --]]
+L["Healing"] = "Healing"

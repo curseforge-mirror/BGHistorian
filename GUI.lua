@@ -4,11 +4,12 @@ local BGH = LibStub("AceAddon-3.0"):GetAddon(addonName)
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName, true)
 local AceGUI = LibStub("AceGUI-3.0")
 local f, scrollFrame, rows, stats
-local lblWinrate, lblDuration, lblKB, lblHK
+local lblWinrate, lblDuration, lblKB, lblHK, lblDmgDone, lblHlgDone
 
 function BGH:CreateGUI()
     f = AceGUI:Create("Frame")
     f:Hide()
+    f:SetWidth(865)
     f:EnableResize(false)
 
     -- f:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
@@ -25,105 +26,24 @@ function BGH:CreateGUI()
 	statsHeader:SetLayout("Flow")
     f:AddChild(statsHeader)
 
-    -- WINRATE
-    local block = AceGUI:Create("SimpleGroup")
-    block:SetRelativeWidth(0.2)
-    statsHeader:AddChild(block)
-
-	local lbl = AceGUI:Create("Label")
-    lbl:SetJustifyH("CENTER")
-    lbl:SetFullWidth(true)
-    lbl:SetText(L["Winrate"])
-    lbl:SetFontObject(GameFontHighlight)
-    block:AddChild(lbl)
-
-	lblWinrate = AceGUI:Create("InteractiveLabel")
-    lblWinrate:SetJustifyH("CENTER")
-    lblWinrate:SetFullWidth(true)
-    lblWinrate:SetFontObject(GameFontHighlightLarge)
-    lblWinrate:SetText(string.format("%.2f%%", 0))
-	lblWinrate:SetCallback("OnEnter", function() self:ShowTooltip(lblWinrate, {
-        string.format("|cff777777%s|r : |cFFCFCFCF%i/%i (%.2f%%)|r", self:MapName(1), stats["victories"][1], stats["count"][1], stats["winrate"][1] * 100),
-        string.format("|cff777777%s|r : |cFFCFCFCF%i/%i (%.2f%%)|r", self:MapName(2), stats["victories"][2], stats["count"][2], stats["winrate"][2] * 100),
-        string.format("|cff777777%s|r : |cFFCFCFCF%i/%i (%.2f%%)|r", self:MapName(3), stats["victories"][3], stats["count"][3], stats["winrate"][3] * 100),
-    }) end)
-	lblWinrate:SetCallback("OnLeave", function() self:HideTooltip() end)
-    block:AddChild(lblWinrate)
-
-    -- DURATION
-    block = AceGUI:Create("SimpleGroup")
-    block:SetRelativeWidth(0.3)
-    statsHeader:AddChild(block)
-
-	lbl = AceGUI:Create("Label")
-    lbl:SetJustifyH("CENTER")
-    lbl:SetFullWidth(true)
-    lbl:SetText(L["Duration"])
-    lbl:SetFontObject(GameFontHighlight)
-    block:AddChild(lbl)
-
-	lblDuration = AceGUI:Create("InteractiveLabel")
-    lblDuration:SetJustifyH("CENTER")
-    lblDuration:SetFullWidth(true)
-    lblDuration:SetFontObject(GameFontHighlightLarge)
-    lblDuration:SetText(self:HumanDuration(0))
-	lblDuration:SetCallback("OnEnter", function() self:ShowTooltip(lblDuration, {
-        string.format("|cff777777%s|r : |cFFCFCFCF%s (%s)|r", self:MapName(1), self:HumanDuration(stats["averageRunTime"][1]), self:HumanDuration(stats["runTime"][1])),
-        string.format("|cff777777%s|r : |cFFCFCFCF%s (%s)|r", self:MapName(2), self:HumanDuration(stats["averageRunTime"][2]), self:HumanDuration(stats["runTime"][2])),
-        string.format("|cff777777%s|r : |cFFCFCFCF%s (%s)|r", self:MapName(3), self:HumanDuration(stats["averageRunTime"][3]), self:HumanDuration(stats["runTime"][3])),
-    }) end)
-	lblDuration:SetCallback("OnLeave", function() self:HideTooltip() end)
-    block:AddChild(lblDuration)
-
-    -- KB
-    block = AceGUI:Create("SimpleGroup")
-    block:SetRelativeWidth(0.25)
-    statsHeader:AddChild(block)
-
-    lbl = AceGUI:Create("Label")
-    lbl:SetJustifyH("CENTER")
-    lbl:SetFullWidth(true)
-    lbl:SetText(L["Killing Blows"])
-    lbl:SetFontObject(GameFontHighlight)
-    block:AddChild(lbl)
-
-    lblKB = AceGUI:Create("InteractiveLabel")
-    lblKB:SetJustifyH("CENTER")
-    lblKB:SetFullWidth(true)
-    lblKB:SetFontObject(GameFontHighlightLarge)
-    lblKB:SetText('0')
-    lblKB:SetCallback("OnEnter", function() self:ShowTooltip(lblKB, {
-        string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(1), stats["averageKillingBlows"][1], stats["killingBlows"][1]),
-        string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(2), stats["averageKillingBlows"][2], stats["killingBlows"][2]),
-        string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(3), stats["averageKillingBlows"][3], stats["killingBlows"][3]),
-    }) end)
-    lblKB:SetCallback("OnLeave", function() self:HideTooltip() end)
-    block:AddChild(lblKB)
-
-    -- HK
-    block = AceGUI:Create("SimpleGroup")
-    block:SetRelativeWidth(0.25)
-    statsHeader:AddChild(block)
-
-    lbl = AceGUI:Create("Label")
-    lbl:SetJustifyH("CENTER")
-    lbl:SetFullWidth(true)
-    lbl:SetText(L["Honorable Kills"])
-    lbl:SetFontObject(GameFontHighlight)
-    block:AddChild(lbl)
-
-    lblHK = AceGUI:Create("InteractiveLabel")
-    lblHK:SetJustifyH("CENTER")
-    lblHK:SetFullWidth(true)
-    lblHK:SetFontObject(GameFontHighlightLarge)
-    lblHK:SetText('0')
-    lblHK:SetCallback("OnEnter", function() self:ShowTooltip(lblHK, {
-        string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(1), stats["averageHonorableKills"][1], stats["honorableKills"][1]),
-        string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(2), stats["averageHonorableKills"][2], stats["honorableKills"][2]),
-        string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(3), stats["averageHonorableKills"][3], stats["honorableKills"][3]),
-    }) end)
-    lblHK:SetCallback("OnLeave", function() self:HideTooltip() end)
-    block:AddChild(lblHK)
+    lblWinrate = BGH:CreateHeaderButton(statsHeader, lblDuration, 0.2, "Winrate", function(idx)
+        return string.format("|cff777777%s|r : |cFFCFCFCF%i/%i (%.2f%%)|r", self:MapName(idx), stats["victories"][idx], stats["count"][idx], stats["winrate"][idx] * 100)
+    end)
+    lblDuration = BGH:CreateHeaderButton(statsHeader, lblDuration, 0.15, "Duration", function(idx)
+        return string.format("|cff777777%s|r : |cFFCFCFCF%s (%s)|r", self:MapName(idx), self:HumanDuration(stats["averageRunTime"][idx]), self:HumanDuration(stats["runTime"][idx]))
+    end)
+    lblKB = BGH:CreateHeaderButton(statsHeader, lblKB, 0.15, "Killing Blows", function(idx)
+        return string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(idx), stats["averageKillingBlows"][idx], stats["killingBlows"][idx])
+    end)
+    lblHK = BGH:CreateHeaderButton(statsHeader, lblHK, 0.15, "Honorable Kills", function(idx)
+        return string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(idx), stats["averageHonorableKills"][idx], stats["honorableKills"][idx])
+    end)
+    lblDmgDone = BGH:CreateHeaderButton(statsHeader, lblDmgDone, 0.175, "Damage Done", function(idx)
+        return string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(idx), stats["averageDamageDone"][idx], stats["damageDone"][idx])
+    end)
+    lblHlgDone = BGH:CreateHeaderButton(statsHeader, lblHlgDone, 0.175, "Healing Done", function(idx)
+        return string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(idx), stats["averageHealingDone"][idx], stats["healingDone"][idx])
+    end)
 
     -- TABLE HEADER
     local tableHeader = AceGUI:Create("SimpleGroup")
@@ -135,101 +55,15 @@ function BGH:CreateGUI()
     margin:SetWidth(4)
     tableHeader:AddChild(margin)
 
-    local btn
-	btn = AceGUI:Create("InteractiveLabel")
-    btn:SetWidth(145)
-    btn:SetText(string.format(" %s ", L["Date"]))
-    btn:SetJustifyH("LEFT")
-	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
-	btn:SetCallback("OnClick", function() BGH:Sort("endTime") end)
-    tableHeader:AddChild(btn)
-
-    margin = AceGUI:Create("Label")
-    margin:SetWidth(4)
-    tableHeader:AddChild(margin)
-
-	btn = AceGUI:Create("InteractiveLabel")
-	btn:SetWidth(170)
-	btn:SetText(string.format(" %s ", L["Battleground"]))
-    btn:SetJustifyH("LEFT")
-	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
-	btn:SetCallback("OnClick", function() BGH:Sort("mapName") end)
-	tableHeader:AddChild(btn)
-
-    margin = AceGUI:Create("Label")
-    margin:SetWidth(4)
-    tableHeader:AddChild(margin)
-
-	btn = AceGUI:Create("InteractiveLabel")
-	btn:SetWidth(94)
-	btn:SetText(string.format(" %s ", L["Duration"]))
-    btn:SetJustifyH("LEFT")
-	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
-	btn:SetCallback("OnClick", function() BGH:Sort("runTime") end)
-    tableHeader:AddChild(btn)
-
-    margin = AceGUI:Create("Label")
-    margin:SetWidth(4)
-    tableHeader:AddChild(margin)
-
-	btn = AceGUI:Create("InteractiveLabel")
-	btn:SetWidth(40)
-	btn:SetText(string.format(" %s ", L["Winner"]))
-    btn:SetJustifyH("CENTER")
-	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
-	btn:SetCallback("OnClick", function() BGH:Sort("battlefieldWinner") end)
-    tableHeader:AddChild(btn)
-
-    margin = AceGUI:Create("Label")
-    margin:SetWidth(4)
-    tableHeader:AddChild(margin)
-
-	btn = AceGUI:Create("InteractiveLabel")
-	btn:SetWidth(36)
-	btn:SetText(string.format(" %s ", L["KB"]))
-    btn:SetJustifyH("RIGHT")
-	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
-	btn:SetCallback("OnClick", function() BGH:Sort("killingBlows") end)
-    tableHeader:AddChild(btn)
-
-    margin = AceGUI:Create("Label")
-    margin:SetWidth(4)
-    tableHeader:AddChild(margin)
-	btn = AceGUI:Create("InteractiveLabel")
-	btn:SetWidth(40)
-	btn:SetText(string.format(" %s ", L["HK"]))
-    btn:SetJustifyH("RIGHT")
-	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
-	btn:SetCallback("OnClick", function() BGH:Sort("honorableKills") end)
-    tableHeader:AddChild(btn)
-
-    margin = AceGUI:Create("Label")
-    margin:SetWidth(4)
-    tableHeader:AddChild(margin)
-
-	btn = AceGUI:Create("InteractiveLabel")
-	btn:SetWidth(40)
-	btn:SetText(string.format(" %s ", L["Deaths"]))
-    btn:SetJustifyH("RIGHT")
-	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
-	btn:SetCallback("OnClick", function() BGH:Sort("deaths") end)
-    tableHeader:AddChild(btn)
-
-    margin = AceGUI:Create("Label")
-    margin:SetWidth(4)
-    tableHeader:AddChild(margin)
-
-	btn = AceGUI:Create("InteractiveLabel")
-	btn:SetWidth(44)
-	btn:SetText(string.format(" %s ", L["Honor"]))
-    btn:SetJustifyH("RIGHT")
-	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
-	btn:SetCallback("OnClick", function() BGH:Sort("honorGained") end)
-	tableHeader:AddChild(btn)
-
-    margin = AceGUI:Create("Label")
-    margin:SetWidth(4)
-    tableHeader:AddChild(margin)
+	BGH:CreateScoreButton(tableHeader, 145, "Date", "endTime")
+	BGH:CreateScoreButton(tableHeader, 170, "Battleground", "mapName")
+    BGH:CreateScoreButton(tableHeader, 94, "Duration", "runTime")
+    BGH:CreateScoreButton(tableHeader, 60, "Winner", "battlefieldWinner")
+    BGH:CreateScoreButton(tableHeader, 36, "KB", "killingBlows")
+    BGH:CreateScoreButton(tableHeader, 90, "Damage", "damageDone")
+    BGH:CreateScoreButton(tableHeader, 90, "Healing", "healingDone")
+    BGH:CreateScoreButton(tableHeader, 40, "HK", "honorableKills")
+    BGH:CreateScoreButton(tableHeader, 40, "Deaths", "deaths")
 
     -- TABLE
     local scrollContainer = AceGUI:Create("SimpleGroup")
@@ -243,15 +77,58 @@ function BGH:CreateGUI()
 	scrollFrame.update = function() BGH:UpdateTableView() end
 end
 
+function BGH:CreateHeaderButton(statsHeader, lblField, relativeWidth, localeStr, tooltipfunc)
+	block = AceGUI:Create("SimpleGroup")
+    block:SetRelativeWidth(relativeWidth)
+
+    lbl = AceGUI:Create("Label")
+    lbl:SetJustifyH("CENTER")
+    lbl:SetFullWidth(true)
+    lbl:SetText(L[localeStr])
+    lbl:SetFontObject(GameFontHighlight)
+    block:AddChild(lbl)
+
+    lblField = AceGUI:Create("InteractiveLabel")
+    lblField:SetJustifyH("CENTER")
+    lblField:SetFullWidth(true)
+    lblField:SetFontObject(GameFontHighlightLarge)
+    lblField:SetText('0')
+    lblField:SetCallback("OnEnter", function() self:ShowTooltip(lblField, {
+        tooltipfunc(1),
+        tooltipfunc(2),
+        tooltipfunc(3),
+        tooltipfunc(4),
+    }) end)
+    lblField:SetCallback("OnLeave", function() self:HideTooltip() end)
+    block:AddChild(lblField)
+    statsHeader:AddChild(block)
+    return lblField
+end
+
+function BGH:CreateScoreButton(tableHeader, width, localeStr, sortfield)
+	btn = AceGUI:Create("InteractiveLabel")
+	btn:SetWidth(width)
+	btn:SetText(string.format(" %s ", L[localeStr]))
+    btn:SetJustifyH("LEFT")
+	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
+	btn:SetCallback("OnClick", function() BGH:Sort(sortfield) end)
+	tableHeader:AddChild(btn)
+	margin = AceGUI:Create("Label")
+    margin:SetWidth(4)
+    tableHeader:AddChild(margin)
+end
+
 function BGH:RefreshLayout()
 	local buttons = HybridScrollFrame_GetButtons(scrollFrame)
     local offset = HybridScrollFrame_GetOffset(scrollFrame)
 
     f:SetStatusText(string.format(L["Recorded %i battlegrounds"], #rows))
     lblWinrate:SetText(string.format("%i/%i (%.2f%%)", stats["victories"][0], stats["count"][0], stats["winrate"][0] * 100))
-    lblDuration:SetText(string.format("%s: %s | %s: %s", L["Avg"], self:HumanDuration(stats["averageRunTime"][0]), L["Sum"], self:HumanDuration(stats["runTime"][0])))
-    lblKB:SetText(string.format("%s: %.1f | %s: %i", L["Avg"], stats["averageKillingBlows"][0], L["Sum"], stats["killingBlows"][0]))
-    lblHK:SetText(string.format("%s: %.1f | %s: %i", L["Avg"], stats["averageHonorableKills"][0], L["Sum"], stats["honorableKills"][0]))
+    lblDuration:SetText(string.format("%s", self:HumanDuration(stats["averageRunTime"][0])))
+    lblKB:SetText(string.format("%.1f", stats["averageKillingBlows"][0]))
+    lblHK:SetText(string.format("%.1f", stats["averageHonorableKills"][0]))
+    lblDmgDone:SetText(string.format("%.1f", stats["averageDamageDone"][0]))
+    lblHlgDone:SetText(string.format("%.1f", stats["averageHealingDone"][0]))
 
 	for buttonIndex = 1, #buttons do
 		local button = buttons[buttonIndex]
@@ -266,9 +143,10 @@ function BGH:RefreshLayout()
             button.RunTime:SetText(self:HumanDuration(row["runTime"]))
             button.BattlefieldWinner:SetTexture(132485 + row["battlefieldWinner"])
             button.KillingBlows:SetText(row["killingBlows"])
+            button.Damage:SetText(row["damageDone"])
+            button.Healing:SetText(row["healingDone"])
             button.HonorableKills:SetText(row["honorableKills"])
             button.Deaths:SetText(row["deaths"])
-            button.HonorGained:SetText(row["honorGained"])
 
             button:SetWidth(scrollFrame.scrollChild:GetWidth())
 			button:Show()
@@ -314,8 +192,7 @@ function BGH:Sort(column)
     self:RefreshLayout()
 end
 
-function BGH:HumanDuration(miliseconds)
-    local seconds = math.floor(miliseconds / 1000)
+function BGH:HumanDuration(seconds)
     if seconds < 60 then
         return string.format(L["%is"], seconds)
     end
@@ -338,6 +215,8 @@ function BGH:MapIconId(mapId)
         return 134420
     elseif mapId == 3 then -- Arathi Basin
         return 133282
+    elseif mapId == 4 then -- Eye of the Storm
+        return 136032
     end
 end
 

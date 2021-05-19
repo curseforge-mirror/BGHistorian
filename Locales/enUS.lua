@@ -10,6 +10,10 @@ L["KB"] = "KB" -- Killing Blows
 L["Honorable Kills"] = "Honorable Kills"
 L["HK"] = "HK" -- Honorable Kills
 L["Deaths"] = "Deaths"
+L["Damage Done"] = "Damage Done"
+L["Damage"] = "Damage"
+L["Healing Done"] = "Healing Done"
+L["Healing"] = "Healing"
 L["Honor"] = "Honor" -- Bonus Honor
 L["Recorded %i battlegrounds"] = "Recorded %i battlegrounds"
 -- Date & time
@@ -29,6 +33,7 @@ L["Winrate"] = "Winrate"
 L["Alterac Valley"] = "Alterac Valley"
 L["Warsong Gulch"] = "Warsong Gulch"
 L["Arathi Basin"] = "Arathi Basin"
+L["Eye of the Storm"] = "Eye of the Storm"
 
 -- Minimap buttons
 L["Options"] = "Options"
