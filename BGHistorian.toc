@@ -1,7 +1,7 @@
-## Interface: 11304
+## Interface: 20501
 ## Title: BGHistorian
 ## Notes: Battlegrounds history and statistics
-## Author: Hetalar/zergrael
+## Author: Hetalar, zergrael
 ## Version: @project-version@
 ## SavedVariables: BGHistorian
 
