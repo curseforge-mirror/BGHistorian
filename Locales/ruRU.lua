@@ -1,85 +1,45 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("BGHistorian", "ruRU", true)
 
---[[Translation missing --]]
 L["%F %T"] = "%F %T"
---[[Translation missing --]]
 L["%ih %im"] = "%ih %im"
---[[Translation missing --]]
 L["%im %is"] = "%im %is"
---[[Translation missing --]]
 L["%is"] = "%is"
 L["Alterac Valley"] = "Альтеракская долина"
 L["Arathi Basin"] = "Низина Арати"
---[[Translation missing --]]
-L["Eye of the Storm"] = "Eye of the Storm"
---[[Translation missing --]]
-L["Avg"] = "Avg"
---[[Translation missing --]]
-L["Battleground"] = "Battleground"
---[[Translation missing --]]
-L["Battlegrounds records can impact memory usage (0 means unlimited)"] = "Battlegrounds records can impact memory usage (0 means unlimited)"
---[[Translation missing --]]
-L["Cleanup and optimize collected data"] = "Cleanup and optimize collected data"
---[[Translation missing --]]
-L["Database reset"] = "Database reset"
---[[Translation missing --]]
-L["Database Settings"] = "Database Settings"
---[[Translation missing --]]
-L["Date"] = "Date"
---[[Translation missing --]]
-L["Deaths"] = "Deaths"
---[[Translation missing --]]
-L["Delete all collected data"] = "Delete all collected data"
---[[Translation missing --]]
-L["Drag"] = "Drag"
---[[Translation missing --]]
-L["Duration"] = "Duration"
---[[Translation missing --]]
-L["HK"] = "HK"
---[[Translation missing --]]
-L["Honor"] = "Honor"
---[[Translation missing --]]
-L["Honorable Kills"] = "Honorable Kills"
---[[Translation missing --]]
-L["KB"] = "KB"
---[[Translation missing --]]
-L["Killing Blows"] = "Killing Blows"
---[[Translation missing --]]
-L["Left Click"] = "Left Click"
---[[Translation missing --]]
-L["Maximum history records"] = "Maximum history records"
---[[Translation missing --]]
-L["Minimap Button Settings"] = "Minimap Button Settings"
---[[Translation missing --]]
-L["Optimize database"] = "Optimize database"
---[[Translation missing --]]
-L["Options"] = "Options"
---[[Translation missing --]]
-L["Purge database"] = "Purge database"
---[[Translation missing --]]
-L["Recorded %i battlegrounds"] = "Recorded %i battlegrounds"
---[[Translation missing --]]
-L["Right Click"] = "Right Click"
---[[Translation missing --]]
-L["Show minimap button"] = "Show minimap button"
---[[Translation missing --]]
-L["Sum"] = "Sum"
---[[Translation missing --]]
-L["to move this button"] = "to move this button"
---[[Translation missing --]]
-L["to open options"] = "to open options"
---[[Translation missing --]]
-L["to open the main window"] = "to open the main window"
+L["Avg"] = "Ср."
+L["Battleground"] = "Поле боя"
+L["Battlegrounds records can impact memory usage (0 means unlimited)"] = "Запись Полей Боя может влиять на производительность (0 означает неограниченное количество)"
+L["Cleanup and optimize collected data"] = "Очистить и оптимизировать собранные данные"
+L["Damage"] = "Урон"
+L["Damage Done"] = "Нанесенный урон"
+L["Database reset"] = "Сброс базы данных"
+L["Database Settings"] = "Настройки базы данных"
+L["Date"] = "Дата"
+L["Deaths"] = "Смерти"
+L["Delete all collected data"] = "Удалить все собранные данные"
+L["Drag"] = "Перетащите"
+L["Duration"] = "Продолжительность"
+L["Eye of the Storm"] = "Око Бури"
+L["Healing"] = "Исцеление"
+L["Healing Done"] = "Получено исцеления"
+L["HK"] = "ПУ"
+L["Honor"] = "Честь"
+L["Honorable Kills"] = "Почетные убийства"
+L["KB"] = "СУ"
+L["Killing Blows"] = "Смертельные удары"
+L["Left Click"] = "ЛКМ"
+L["Maximum history records"] = "Максимальное количество записей в истории"
+L["Minimap Button Settings"] = "Настройки кнопки на миникарте"
+L["Optimize database"] = "Оптимизировать базу данных"
+L["Options"] = "Настройки"
+L["Purge database"] = "Очистить базу данных"
+L["Recorded %i battlegrounds"] = "Записано %i полей боя"
+L["Right Click"] = "ПКМ"
+L["Show minimap button"] = "Показать кнопку на миникарте"
+L["Sum"] = "Сумма"
+L["to move this button"] = "переместить эту кнопку"
+L["to open options"] = "открыть настройки"
+L["to open the main window"] = "открыть главное окно"
 L["Warsong Gulch"] = "Ущелье Песни Войны"
---[[Translation missing --]]
-L["Winner"] = "Winner"
---[[Translation missing --]]
-L["Winrate"] = "Winrate"
---[[Translation missing --]]
-L["Damage Done"] = "Damage Done"
---[[Translation missing --]]
-L["Damage"] = "Damage"
---[[Translation missing --]]
-L["Healing Done"] = "Healing Done"
---[[Translation missing --]]
-L["Healing"] = "Healing"
+L["Winner"] = "Победа"
+L["Winrate"] = "Процент выигрыша"
