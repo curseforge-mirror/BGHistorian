@@ -48,3 +48,7 @@ L["Damage"] = "Damage"
 L["Healing Done"] = "Healing Done"
 --[[Translation missing --]]
 L["Healing"] = "Healing"
+--[[Translation missing --]]
+L["Toggle"] = "Toggle"
+--[[Translation missing --]]
+L["Opens or closes the main window"] = "Opens or closes the main window"

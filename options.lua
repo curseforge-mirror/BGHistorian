@@ -13,6 +13,13 @@ function BGH:RegisterOptionsTable()
         handler = BGH,
         type = "group",
         args = {
+            Toggle = {
+                order = 0,
+                type = "execute",
+                name = L["Toggle"],
+                desc = L["Opens or closes the main window"],
+                func = function() self:Toggle() end
+            },
             General = {
                 order = 1,
                 type = "group",

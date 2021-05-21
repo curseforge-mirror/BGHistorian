@@ -43,3 +43,7 @@ L["to open the main window"] = "открыть главное окно"
 L["Warsong Gulch"] = "Ущелье Песни Войны"
 L["Winner"] = "Победа"
 L["Winrate"] = "Процент выигрыша"
+--[[Translation missing --]]
+L["Toggle"] = "Toggle"
+--[[Translation missing --]]
+L["Opens or closes the main window"] = "Opens or closes the main window"
