@@ -20,6 +20,7 @@ function BGH:OnInitialize()
 
     self:RegisterEvent("UPDATE_BATTLEFIELD_STATUS")
     self:RegisterEvent("UPDATE_BATTLEFIELD_SCORE")
+    self:RegisterEvent("CHAT_MSG_COMBAT_HONOR_GAIN")
 
 	self:DrawMinimapIcon()
     self:RegisterOptionsTable()
@@ -45,10 +46,16 @@ function BGH:UPDATE_BATTLEFIELD_STATUS(eventName, battleFieldIndex)
 
     if self.current["status"] == "none" and status == "active" then
         self.battlegroundEnded = false
+        self.current = {
+	        status = "none",
+	        battleFieldIndex = nil,
+	        stats = {},
+	    }
         self.current["status"] = status
         self.current["battleFieldIndex"] = battleFieldIndex
         self.current["stats"]["startTime"] = time()
         self.current["stats"]["mapName"] = mapName
+        self.current["stats"]["honorGained"] = 0
         self.current["stats"]["mapId"] = self:MapId(mapName)
     elseif self.current["battleFieldIndex"] == battleFieldIndex and self.current["status"] == "active" and status == "none" then
         self.current["status"] = status
@@ -68,6 +75,29 @@ function BGH:UPDATE_BATTLEFIELD_SCORE(eventName)
     self:RecordBattleground()
 end
 
+-- chatMessage is either going to be one of two messages:
+-- You have been awarded X honor points.
+-- <Name> dies, honorable kill Rank: <rank> (X Honor Points)
+function BGH:CHAT_MSG_COMBAT_HONOR_GAIN(_, chatMessage)
+	local honor = self:ExtractHonorFromMessage(chatMessage)
+	if honor == 0 then
+		return
+	end
+	self.current["stats"]["honorGained"] = self.current["stats"]["honorGained"] + honor
+end
+
+function BGH:ExtractHonorFromMessage(message)
+	for token in string.gmatch(message, "[^%s]+") do
+		local strToParse = token:gsub('%(', '')
+		local honor = tonumber(strToParse)
+		if not (honor == nil) then
+			return honor
+		end
+	end
+
+	return 0
+end
+
 function BGH:RecordBattleground()
 	local _, _, _, _, numHorde = GetBattlefieldTeamInfo(0)
     local _, _, _, _, numAlliance = GetBattlefieldTeamInfo(1)
@@ -83,21 +113,20 @@ function BGH:RecordBattleground()
     local numScores = GetNumBattlefieldScores()
     local playerScore
     for i=1, numScores do
-        name, killingBlows, honorableKills, deaths, honorGained, _, _, _, _, _, damageDone, healingDone = GetBattlefieldScore(i)
+        name, killingBlows, honorableKills, deaths, _, _, _, _, _, _, damageDone, healingDone = GetBattlefieldScore(i)
         if name == UnitName("player") then
             playerScore = {
                 ["name"] = name,
                 ["killingBlows"] = killingBlows,
                 ["honorableKills"] = honorableKills,
                 ["deaths"] = deaths,
-                ["honorGained"] = honorGained,
                 ["damageDone"] = damageDone,
                 ["healingDone"] = healingDone,
             }
         end
     end
     self.current["stats"]["score"] = playerScore
-    table.insert(self.db.char.history, self:DeepCopy(self.current["stats"], {}))
+    table.insert(self.db.char.history, self.current["stats"])
 
     if self.db.profile.maxHistory > 0 then
         -- Shift array until we get under threshold
@@ -105,32 +134,6 @@ function BGH:RecordBattleground()
             table.remove(self.db.char.history, 1)
         end
     end
-end
-
-function BGH:DeepCopy(orig, copies)
-    copies = copies or {}
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        if copies[orig] then
-            copy = copies[orig]
-        else
-            copy = {}
-            copies[orig] = copy
-            for orig_key, orig_value in next, orig, nil do
-                copy[self:DeepCopy(orig_key, copies)] = self:DeepCopy(orig_value, copies)
-            end
-            setmetatable(copy, self:DeepCopy(getmetatable(orig), copies))
-        end
-    else -- number, string, boolean, etc
-        copy = orig
-    end
-    return copy
-end
-
-function BGH:ResetDatabase()
-    self.db:ResetDB()
-    self:Print(L["Database reset"])
 end
 
 function BGH:DrawMinimapIcon()
@@ -170,6 +173,10 @@ function BGH:BuildTable(sortColumn)
     local tbl = {}
 
     for _, row in ipairs(self.db.char.history) do
+    	local honorGained = 0
+    	if not (row["honorGained"] == nil) then
+        	honorGained = row["honorGained"]
+        end
         table.insert(tbl, {
             ["endTime"] = row["endTime"],
             ["mapId"] = row["mapId"],
@@ -179,10 +186,11 @@ function BGH:BuildTable(sortColumn)
             ["killingBlows"] = row["score"]["killingBlows"],
             ["honorableKills"] = row["score"]["honorableKills"],
             ["deaths"] = row["score"]["deaths"],
-            ["honorGained"] = row["score"]["honorGained"],
+            ["honorGained"] = honorGained,
             ["damageDone"] = row["score"]["damageDone"],
             ["healingDone"] = row["score"]["healingDone"],
         })
+        
     end
 
     if sortColumn then
@@ -298,6 +306,20 @@ function BGH:CalcStats(rows)
             [3] = 0,
             [4] = 0,
         },
+        honor = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+            [4] = 0,
+        },
+        averageHonor = {
+            [0] = 0,
+            [1] = 0,
+            [2] = 0,
+            [3] = 0,
+            [4] = 0,
+        },
     }
 
     if #rows == 0 then
@@ -319,6 +341,7 @@ function BGH:CalcStats(rows)
             s["honorableKills"][id] = s["honorableKills"][id] + row["honorableKills"]
             s["damageDone"][id] = s["damageDone"][id] + row["damageDone"]
             s["healingDone"][id] = s["healingDone"][id] + row["healingDone"]
+            s["honor"][id] = s["honor"][id] + row["honorGained"]
         end
     end
 
@@ -332,6 +355,7 @@ function BGH:CalcStats(rows)
             s["honorableKills"][0] = s["honorableKills"][0] + s["honorableKills"][id]
             s["damageDone"][0] = s["damageDone"][0] + s["damageDone"][id]
             s["healingDone"][0] = s["healingDone"][0] + s["healingDone"][id]
+            s["honor"][0] = s["honor"][0] + s["honor"][id]
 
             s["winrate"][id] = s["victories"][id] / s["count"][id]
             s["averageRunTime"][id] = s["runTime"][id] / s["count"][id]
@@ -339,6 +363,7 @@ function BGH:CalcStats(rows)
             s["averageHonorableKills"][id] = s["honorableKills"][id] / s["count"][id]
             s["averageDamageDone"][id] = s["damageDone"][id] / s["count"][id]
             s["averageHealingDone"][id] = s["healingDone"][id] / s["count"][id]
+            s["averageHonor"][id] = s["honor"][id] / s["count"][id]
         end
     end
 
@@ -349,6 +374,7 @@ function BGH:CalcStats(rows)
     s["averageHonorableKills"][0] = s["honorableKills"][0] / s["count"][0]
     s["averageDamageDone"][0] = s["damageDone"][0] / s["count"][0]
     s["averageHealingDone"][0] = s["healingDone"][0] / s["count"][0]
+    s["averageHonor"][0] = s["honor"][0] / s["count"][0]
     return s
 end
 
@@ -378,6 +404,11 @@ function BGH:MapName(mapId)
     end
 
     return nil
+end
+
+function BGH:ResetDatabase()
+    self.db:ResetDB()
+    self:Print(L["Database reset"])
 end
 
 function BGH:OptimizeDatabase()

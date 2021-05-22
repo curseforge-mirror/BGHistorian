@@ -4,12 +4,12 @@ local BGH = LibStub("AceAddon-3.0"):GetAddon(addonName)
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName, true)
 local AceGUI = LibStub("AceGUI-3.0")
 local f, scrollFrame, rows, stats
-local lblWinrate, lblDuration, lblKB, lblHK, lblDmgDone, lblHlgDone
+local lblWinrate, lblDuration, lblKB, lblHK, lblDmgDone, lblHlgDone, lblHonor
 
 function BGH:CreateGUI()
     f = AceGUI:Create("Frame")
     f:Hide()
-    f:SetWidth(865)
+    f:SetWidth(905)
     f:EnableResize(false)
 
     -- f:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
@@ -26,23 +26,26 @@ function BGH:CreateGUI()
 	statsHeader:SetLayout("Flow")
     f:AddChild(statsHeader)
 
-    lblWinrate = BGH:CreateHeaderButton(statsHeader, lblDuration, 0.2, "Winrate", function(idx)
+    lblWinrate = BGH:CreateHeaderButton(statsHeader, lblDuration, 0.16, "Winrate", function(idx)
         return string.format("|cff777777%s|r : |cFFCFCFCF%i/%i (%.2f%%)|r", self:MapName(idx), stats["victories"][idx], stats["count"][idx], stats["winrate"][idx] * 100)
     end)
-    lblDuration = BGH:CreateHeaderButton(statsHeader, lblDuration, 0.15, "Duration", function(idx)
+    lblDuration = BGH:CreateHeaderButton(statsHeader, lblDuration, 0.14, "Duration", function(idx)
         return string.format("|cff777777%s|r : |cFFCFCFCF%s (%s)|r", self:MapName(idx), self:HumanDuration(stats["averageRunTime"][idx]), self:HumanDuration(stats["runTime"][idx]))
     end)
-    lblKB = BGH:CreateHeaderButton(statsHeader, lblKB, 0.15, "Killing Blows", function(idx)
+    lblKB = BGH:CreateHeaderButton(statsHeader, lblKB, 0.14, "Killing Blows", function(idx)
         return string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(idx), stats["averageKillingBlows"][idx], stats["killingBlows"][idx])
     end)
-    lblHK = BGH:CreateHeaderButton(statsHeader, lblHK, 0.15, "Honorable Kills", function(idx)
+    lblHK = BGH:CreateHeaderButton(statsHeader, lblHK, 0.14, "Honorable Kills", function(idx)
         return string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(idx), stats["averageHonorableKills"][idx], stats["honorableKills"][idx])
     end)
-    lblDmgDone = BGH:CreateHeaderButton(statsHeader, lblDmgDone, 0.175, "Damage Done", function(idx)
+    lblDmgDone = BGH:CreateHeaderButton(statsHeader, lblDmgDone, 0.14, "Damage Done", function(idx)
         return string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(idx), stats["averageDamageDone"][idx], stats["damageDone"][idx])
     end)
-    lblHlgDone = BGH:CreateHeaderButton(statsHeader, lblHlgDone, 0.175, "Healing Done", function(idx)
+    lblHlgDone = BGH:CreateHeaderButton(statsHeader, lblHlgDone, 0.14, "Healing Done", function(idx)
         return string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(idx), stats["averageHealingDone"][idx], stats["healingDone"][idx])
+    end)
+    lblHonor = BGH:CreateHeaderButton(statsHeader, lblHonor, 0.14, "Honor", function(idx)
+        return string.format("|cff777777%s|r : |cFFCFCFCF%.1f (%i)|r", self:MapName(idx), stats["averageHonor"][idx], stats["honor"][idx])
     end)
 
     -- TABLE HEADER
@@ -64,6 +67,7 @@ function BGH:CreateGUI()
     BGH:CreateScoreButton(tableHeader, 90, "Healing", "healingDone")
     BGH:CreateScoreButton(tableHeader, 40, "HK", "honorableKills")
     BGH:CreateScoreButton(tableHeader, 40, "Deaths", "deaths")
+    BGH:CreateScoreButton(tableHeader, 40, "Honor", "honorGained")
 
     -- TABLE
     local scrollContainer = AceGUI:Create("SimpleGroup")
@@ -129,6 +133,7 @@ function BGH:RefreshLayout()
     lblHK:SetText(string.format("%.1f", stats["averageHonorableKills"][0]))
     lblDmgDone:SetText(string.format("%.1f", stats["averageDamageDone"][0]))
     lblHlgDone:SetText(string.format("%.1f", stats["averageHealingDone"][0]))
+    lblHonor:SetText(string.format("%.1f", stats["honor"][0]))
 
 	for buttonIndex = 1, #buttons do
 		local button = buttons[buttonIndex]
@@ -147,6 +152,7 @@ function BGH:RefreshLayout()
             button.Healing:SetText(row["healingDone"])
             button.HonorableKills:SetText(row["honorableKills"])
             button.Deaths:SetText(row["deaths"])
+            button.Honor:SetText(row["honorGained"])
 
             button:SetWidth(scrollFrame.scrollChild:GetWidth())
 			button:Show()

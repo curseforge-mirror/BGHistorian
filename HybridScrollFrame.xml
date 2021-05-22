@@ -71,6 +71,12 @@
 						<Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.HonorableKills" x="4"/>
 					</Anchors>
                 </FontString>
+                <FontString parentKey="Honor" inherits="GameFontHighlightSmall" justifyH="LEFT">
+                    <Size x="40"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativePoint="RIGHT" relativeKey="$parent.Deaths" x="4"/>
+                    </Anchors>
+                </FontString>
             </Layer>
             <Layer level="HIGHLIGHT">
                 <Texture parentKey="Highlight" setAllPoints="true" alphaMode="ADD">
