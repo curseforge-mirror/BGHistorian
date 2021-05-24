@@ -81,6 +81,10 @@ function BGH:CreateGUI()
 	scrollFrame.update = function() BGH:UpdateTableView() end
 end
 
+function BGH:UpdateTableView()
+    self:RefreshLayout()
+end
+
 function BGH:CreateHeaderButton(statsHeader, lblField, relativeWidth, localeStr, tooltipfunc)
 	block = AceGUI:Create("SimpleGroup")
     block:SetRelativeWidth(relativeWidth)
