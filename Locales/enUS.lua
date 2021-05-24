@@ -1,4 +1,5 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("BGHistorian", "enUS", true)
+if not L then return end 
 
 -- Main window
 L["Date"] = "Date"

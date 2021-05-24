@@ -1,4 +1,5 @@
-local L = LibStub("AceLocale-3.0"):NewLocale("BGHistorian", "zhTW", true)
+local L = LibStub("AceLocale-3.0"):NewLocale("BGHistorian", "zhTW")
+if not L then return end 
 
 --[[Translation missing --]]
 L["%F %T"] = "%F %T"
