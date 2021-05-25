@@ -129,7 +129,7 @@ function BGH:RecordBattleground()
 end
 
 function BGH:AddEntryToHistory(stats)
-    --if self:VerifyStats(stats) then
+    if self:VerifyStats(stats) then
         table.insert(self.db.char.history, stats)
 
         if self.db.profile.maxHistory > 0 then
@@ -138,7 +138,7 @@ function BGH:AddEntryToHistory(stats)
                 table.remove(self.db.char.history, 1)
             end
         end
-    --end
+    end
 end
 
 function BGH:VerifyStats(stats)
