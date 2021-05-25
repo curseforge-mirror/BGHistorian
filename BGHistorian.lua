@@ -79,11 +79,17 @@ end
 -- You have been awarded X honor points.
 -- <Name> dies, honorable kill Rank: <rank> (X Honor Points)
 function BGH:CHAT_MSG_COMBAT_HONOR_GAIN(_, chatMessage)
-	local honor = self:ExtractHonorFromMessage(chatMessage)
-	if honor == 0 then
-		return
-	end
-	self.current["stats"]["honorGained"] = self.current["stats"]["honorGained"] + honor
+    local honor = self:ExtractHonorFromMessage(chatMessage)
+    if honor == 0 then
+        return
+    end
+    if self.current["stats"]["endTime"] then
+        local endTime = self.current["stats"]["endTime"]
+        if time() - endTime > 5 then
+            return
+        end
+    end
+    self.current["stats"]["honorGained"] = self.current["stats"]["honorGained"] + honor
 end
 
 function BGH:ExtractHonorFromMessage(message)
