@@ -99,24 +99,17 @@ function BGH:ExtractHonorFromMessage(message)
 end
 
 function BGH:RecordBattleground()
-	local _, _, _, _, numHorde = GetBattlefieldTeamInfo(0)
-    local _, _, _, _, numAlliance = GetBattlefieldTeamInfo(1)
-
     self.current["stats"]["battlefieldWinner"] = GetBattlefieldWinner()
     self.current["stats"]["endTime"] = time()
-    self.current["stats"]["numHorde"] = numHorde
-    self.current["stats"]["numAlliance"] = numAlliance
     
-
     -- BG specific stats
-	local numStatColumns = GetNumBattlefieldStats()
+    local numStatColumns = GetNumBattlefieldStats()
     local numScores = GetNumBattlefieldScores()
     local playerScore
     for i=1, numScores do
         name, killingBlows, honorableKills, deaths, _, _, _, _, _, _, damageDone, healingDone = GetBattlefieldScore(i)
         if name == UnitName("player") then
             playerScore = {
-                ["name"] = name,
                 ["killingBlows"] = killingBlows,
                 ["honorableKills"] = honorableKills,
                 ["deaths"] = deaths,
@@ -126,14 +119,60 @@ function BGH:RecordBattleground()
         end
     end
     self.current["stats"]["score"] = playerScore
-    table.insert(self.db.char.history, self.current["stats"])
+    self:AddEntryToHistory(self.current["stats"])
+end
 
-    if self.db.profile.maxHistory > 0 then
-        -- Shift array until we get under threshold
-        while (#self.db.char.history > self.db.profile.maxHistory) do
-            table.remove(self.db.char.history, 1)
+function BGH:AddEntryToHistory(stats)
+    --if self:VerifyStats(stats) then
+        table.insert(self.db.char.history, stats)
+
+        if self.db.profile.maxHistory > 0 then
+            -- Shift array until we get under threshold
+            while (#self.db.char.history > self.db.profile.maxHistory) do
+                table.remove(self.db.char.history, 1)
+            end
         end
+    --end
+end
+
+function BGH:VerifyStats(stats)
+    if not stats then
+        return false
     end
+    if not stats["mapId"] then
+        return false
+    end
+    if not stats["endTime"] then
+        return false
+    end
+    if not stats["battlefieldWinner"] then
+        return false
+    end
+    if not stats["score"] then
+        return false
+    end
+    if not stats["score"]["damageDone"] then
+        return false
+    end
+    if not stats["score"]["deaths"] then
+        return false
+    end
+    if not stats["score"]["killingBlows"] then
+        return false
+    end
+    if not stats["score"]["healingDone"] then
+        return false
+    end
+    if not stats["score"]["honorableKills"] then
+        return false
+    end
+    if not stats["honorGained"] then
+        return false
+    end
+    if not stats["startTime"] then
+        return false
+    end
+    return true
 end
 
 function BGH:DrawMinimapIcon()
@@ -412,15 +451,12 @@ function BGH:ResetDatabase()
 end
 
 function BGH:OptimizeDatabase()
+    local newHistory = {}
+    local stats
     for i, row in ipairs(self.db.char.history) do
-        if row["battleFieldIndex"] then
-            self.db.char.history[i]["battleFieldIndex"] = nil
-        end
-        if row["status"] then
-            self.db.char.history[i]["status"] = nil
-        end
-        if not row["mapId"] then
-            self.db.char.history[i]["mapId"] = self:MapId(row["mapName"])
+        if self:VerifyStats(self.db.char.history[i]) then
+            table.insert(newHistory, self.db.char.history[i])
         end
     end
+    self.db.char.history = newHistory
 end
