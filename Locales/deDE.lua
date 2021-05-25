@@ -46,3 +46,5 @@ L["Toggle"] = "Toggle"
 L["Warsong Gulch"] = "Kriegshymnenschlucht"
 L["Winner"] = "Gewinner"
 L["Winrate"] = "Gewinnrate"
+--[[Translation missing --]]
+L["Database optimized"] = "Database optimized"

@@ -91,3 +91,5 @@ L["Healing"] = "Healing"
 L["Toggle"] = "Toggle"
 --[[Translation missing --]]
 L["Opens or closes the main window"] = "Opens or closes the main window"
+--[[Translation missing --]]
+L["Database optimized"] = "Database optimized"

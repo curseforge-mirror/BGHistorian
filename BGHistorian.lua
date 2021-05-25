@@ -465,5 +465,5 @@ function BGH:OptimizeDatabase()
         end
     end
     self.db.char.history = newHistory
-    self:Print("Database optimized.")
+    self:Print(L["Database optimized"])
 end

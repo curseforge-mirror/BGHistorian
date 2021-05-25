@@ -46,3 +46,5 @@ L["Toggle"] = "Переключать"
 L["Warsong Gulch"] = "Ущелье Песни Войны"
 L["Winner"] = "Победа"
 L["Winrate"] = "Процент выигрыша"
+--[[Translation missing --]]
+L["Database optimized"] = "Database optimized"
