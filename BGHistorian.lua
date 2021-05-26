@@ -54,7 +54,6 @@ function BGH:UPDATE_BATTLEFIELD_STATUS(eventName, battleFieldIndex)
         self.current["status"] = status
         self.current["battleFieldIndex"] = battleFieldIndex
         self.current["stats"]["startTime"] = time()
-        self.current["stats"]["mapName"] = mapName
         self.current["stats"]["honorGained"] = 0
         self.current["stats"]["mapId"] = self:MapId(mapName)
     elseif self.current["battleFieldIndex"] == battleFieldIndex and self.current["status"] == "active" and status == "none" then
@@ -225,7 +224,7 @@ function BGH:BuildTable(sortColumn)
         table.insert(tbl, {
             ["endTime"] = row["endTime"],
             ["mapId"] = row["mapId"],
-            ["mapName"] = row["mapName"],
+            ["mapName"] = self:MapName(row["mapId"]),
             ["runTime"] = (row["endTime"] - row["startTime"]),
             ["battlefieldWinner"] = row["battlefieldWinner"],
             ["killingBlows"] = row["score"]["killingBlows"],
