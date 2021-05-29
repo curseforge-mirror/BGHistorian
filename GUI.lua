@@ -1,10 +1,11 @@
 local addonName = "BGHistorian"
-local addonTitle = select(2, GetAddOnInfo(addonName))
-local BGH = LibStub("AceAddon-3.0"):GetAddon(addonName)
-local L = LibStub("AceLocale-3.0"):GetLocale(addonName, true)
-local AceGUI = LibStub("AceGUI-3.0")
-local f, scrollFrame, rows, stats
+local addonTitle = select(2, _G.GetAddOnInfo(addonName))
+local BGH = _G.LibStub("AceAddon-3.0"):GetAddon(addonName)
+local L = _G.LibStub("AceLocale-3.0"):GetLocale(addonName, true)
+local AceGUI = _G.LibStub("AceGUI-3.0")
+local f, scrollFrame, rows, stats, dropDown
 local lblWinrate, lblDuration, lblKB, lblHK, lblDmgDone, lblHlgDone, lblHonor
+local BGFilter = 0
 
 function BGH:CreateGUI()
     f = AceGUI:Create("Frame")
@@ -15,18 +16,18 @@ function BGH:CreateGUI()
     -- f:SetCallback("OnClose", function(widget) AceGUI:Release(widget) end)
     f:SetTitle(addonTitle)
     local frameName = addonName .."_MainFrame"
-	_G[frameName] = f
-	table.insert(UISpecialFrames, frameName) -- Allow ESC close
+    _G[frameName] = f
+    table.insert(_G.UISpecialFrames, frameName) -- Allow ESC close
     f:SetStatusText("Status Bar")
     f:SetLayout("Flow")
 
     -- STATS HEADER
     local statsHeader = AceGUI:Create("SimpleGroup")
-	statsHeader:SetFullWidth(true)
-	statsHeader:SetLayout("Flow")
+    statsHeader:SetFullWidth(true)
+    statsHeader:SetLayout("Flow")
     f:AddChild(statsHeader)
 
-    lblWinrate = BGH:CreateHeaderButton(statsHeader, lblDuration, 0.14, "Winrate", function(idx)
+    lblWinrate = BGH:CreateHeaderButton(statsHeader, lblDuration, 0.1599, "Winrate", function(idx)
         return string.format("|cff777777%s|r : |cFFCFCFCF%i/%i (%.2f%%)|r", self:MapName(idx), stats["victories"][idx], stats["count"][idx], stats["winrate"][idx] * 100)
     end)
     lblDuration = BGH:CreateHeaderButton(statsHeader, lblDuration, 0.14, "Duration", function(idx)
@@ -50,16 +51,16 @@ function BGH:CreateGUI()
 
     -- TABLE HEADER
     local tableHeader = AceGUI:Create("SimpleGroup")
-	tableHeader:SetFullWidth(true)
-	tableHeader:SetLayout("Flow")
+    tableHeader:SetFullWidth(true)
+    tableHeader:SetLayout("Flow")
     f:AddChild(tableHeader)
 
     local margin = AceGUI:Create("Label")
     margin:SetWidth(4)
     tableHeader:AddChild(margin)
 
-	BGH:CreateScoreButton(tableHeader, 145, "Date", "endTime")
-	BGH:CreateScoreButton(tableHeader, 170, "Battleground", "mapName")
+    BGH:CreateScoreButton(tableHeader, 145, "Date", "endTime")
+    BGH:CreateScoreButton(tableHeader, 170, "Battleground", "mapName")
     BGH:CreateScoreButton(tableHeader, 94, "Duration", "runTime")
     BGH:CreateScoreButton(tableHeader, 60, "Winner", "battlefieldWinner")
     BGH:CreateScoreButton(tableHeader, 36, "KB", "killingBlows")
@@ -76,9 +77,50 @@ function BGH:CreateGUI()
     scrollContainer:SetLayout("Fill")
     f:AddChild(scrollContainer)
 
-	scrollFrame = CreateFrame("ScrollFrame", nil, scrollContainer.frame, "BGHHybridScrollFrame")
-	HybridScrollFrame_CreateButtons(scrollFrame, "BGHHybridScrollListItemTemplate")
-	scrollFrame.update = function() BGH:UpdateTableView() end
+    scrollFrame = _G.CreateFrame("ScrollFrame", nil, scrollContainer.frame, "BGHHybridScrollFrame")
+    _G.HybridScrollFrame_CreateButtons(scrollFrame, "BGHHybridScrollListItemTemplate")
+    scrollFrame.update = function() BGH:UpdateTableView() end
+
+    self:CreateBGFilterDropDown()
+end
+
+function BGH:CreateBGFilterDropDown()
+    dropDown = _G.CreateFrame("Frame", "FilterDropDownMenu", f.frame, "UIDropDownMenuTemplate")
+    dropDown:SetPoint("bottomright", f.frame, "bottomright", -120, 8)
+    _G.UIDropDownMenu_SetWidth(dropDown, 200)
+    _G.UIDropDownMenu_SetText(dropDown, self:MapIdFilterDisplayName(BGFilter))
+
+    _G.UIDropDownMenu_Initialize(dropDown, function()
+        local info = _G.UIDropDownMenu_CreateInfo()
+        for i=0,4 do
+            info.text = BGH:MapIdFilterDisplayName(i)
+            info.arg1 = i
+            info.value = i
+            info.checked = i == BGFilter
+            info.owner = dropDown
+            info.fontObject = _G.GameFontHighlight
+            info.func = FilterDropDownMenu_OnClick
+            if i > 0 then
+                info.icon = BGH:MapIconId(i)
+            end
+            _G.UIDropDownMenu_AddButton(info)
+        end
+    end)
+    
+    function FilterDropDownMenu_OnClick(self, newValue)
+        BGFilter = newValue
+        _G.UIDropDownMenu_SetText(dropDown, BGH:MapIdFilterDisplayName(BGFilter))
+        _G.CloseDropDownMenus()
+        BGH:Filter()
+    end
+end
+
+function BGH:MapIdFilterDisplayName(mapID)
+    local name = self:MapName(mapID)
+    if not name then
+        return L["All Battlegrounds"]
+    end
+    return name
 end
 
 function BGH:UpdateTableView()
@@ -86,7 +128,7 @@ function BGH:UpdateTableView()
 end
 
 function BGH:CreateHeaderButton(statsHeader, lblField, relativeWidth, localeStr, tooltipfunc)
-	block = AceGUI:Create("SimpleGroup")
+    block = AceGUI:Create("SimpleGroup")
     block:SetRelativeWidth(relativeWidth)
 
     lbl = AceGUI:Create("Label")
@@ -114,21 +156,21 @@ function BGH:CreateHeaderButton(statsHeader, lblField, relativeWidth, localeStr,
 end
 
 function BGH:CreateScoreButton(tableHeader, width, localeStr, sortfield)
-	btn = AceGUI:Create("InteractiveLabel")
-	btn:SetWidth(width)
-	btn:SetText(string.format(" %s ", L[localeStr]))
+    btn = AceGUI:Create("InteractiveLabel")
+    btn:SetWidth(width)
+    btn:SetText(string.format(" %s ", L[localeStr]))
     btn:SetJustifyH("LEFT")
-	btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
-	btn:SetCallback("OnClick", function() BGH:Sort(sortfield) end)
-	tableHeader:AddChild(btn)
-	margin = AceGUI:Create("Label")
+    btn.highlight:SetColorTexture(0.3, 0.3, 0.3, 0.5)
+    btn:SetCallback("OnClick", function() BGH:Sort(sortfield) end)
+    tableHeader:AddChild(btn)
+    margin = AceGUI:Create("Label")
     margin:SetWidth(4)
     tableHeader:AddChild(margin)
 end
 
 function BGH:RefreshLayout()
-	local buttons = HybridScrollFrame_GetButtons(scrollFrame)
-    local offset = HybridScrollFrame_GetOffset(scrollFrame)
+    local buttons = _G.HybridScrollFrame_GetButtons(scrollFrame)
+    local offset = _G.HybridScrollFrame_GetOffset(scrollFrame)
 
     f:SetStatusText(string.format(L["Recorded %i battlegrounds"], #rows))
     lblWinrate:SetText(string.format("%i/%i (%.2f%%)", stats["victories"][0], stats["count"][0], stats["winrate"][0] * 100))
@@ -139,15 +181,15 @@ function BGH:RefreshLayout()
     lblHlgDone:SetText(string.format("%.1f", stats["averageHealingDone"][0]))
     lblHonor:SetText(string.format("%.1f", stats["honor"][0]))
 
-	for buttonIndex = 1, #buttons do
-		local button = buttons[buttonIndex]
+    for buttonIndex = 1, #buttons do
+        local button = buttons[buttonIndex]
         local itemIndex = buttonIndex + offset
         local row = rows[itemIndex]
 
         if (itemIndex <= #rows) then
             button:SetID(itemIndex)
             button.Icon:SetTexture(self:MapIconId(row["mapId"]))
-            button.EndTime:SetText(date(L["%F %T"], row["endTime"]))
+            button.EndTime:SetText(_G.date(L["%F %T"], row["endTime"]))
             button.MapName:SetText(row["mapName"])
             button.RunTime:SetText(self:HumanDuration(row["runTime"]))
             button.BattlefieldWinner:SetTexture(132485 + row["battlefieldWinner"])
@@ -159,17 +201,17 @@ function BGH:RefreshLayout()
             button.Honor:SetText(row["honorGained"])
 
             button:SetWidth(scrollFrame.scrollChild:GetWidth())
-			button:Show()
-		else
-			button:Hide()
-		end
-	end
+            button:Show()
+        else
+            button:Hide()
+        end
+    end
 
-	local buttonHeight = scrollFrame.buttonHeight
-	local totalHeight = #rows * buttonHeight
-	local shownHeight = #buttons * buttonHeight
+    local buttonHeight = scrollFrame.buttonHeight
+    local totalHeight = #rows * buttonHeight
+    local shownHeight = #buttons * buttonHeight
 
-	HybridScrollFrame_Update(scrollFrame, totalHeight, shownHeight)
+    _G.HybridScrollFrame_Update(scrollFrame, totalHeight, shownHeight)
 end
 
 function BGH:Show()
@@ -177,7 +219,7 @@ function BGH:Show()
         self:CreateGUI()
     end
 
-    rows = BGH:BuildTable()
+    rows = BGH:BuildTable(nil, BGFilter)
     stats = BGH:CalcStats(rows)
 
     f:Show()
@@ -198,7 +240,14 @@ end
 
 function BGH:Sort(column)
     scrollFrame:SetVerticalScroll(0)
-    rows = BGH:BuildTable(column)
+    rows = BGH:BuildTable(column, BGFilter)
+    self:RefreshLayout()
+end
+
+function BGH:Filter()
+    scrollFrame:SetVerticalScroll(0)
+    rows = BGH:BuildTable(nil, BGFilter)
+    stats = BGH:CalcStats(rows)
     self:RefreshLayout()
 end
 

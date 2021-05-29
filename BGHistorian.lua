@@ -1,11 +1,11 @@
 local addonName = "BGHistorian"
-local addonTitle = select(2, GetAddOnInfo(addonName))
-local BGH = LibStub("AceAddon-3.0"):NewAddon(addonName, "AceConsole-3.0", "AceEvent-3.0")
-local L = LibStub("AceLocale-3.0"):GetLocale(addonName, true)
-local libDBIcon = LibStub("LibDBIcon-1.0")
+local addonTitle = select(2, _G.GetAddOnInfo(addonName))
+local BGH = _G.LibStub("AceAddon-3.0"):NewAddon(addonName, "AceConsole-3.0", "AceEvent-3.0")
+local L = _G.LibStub("AceLocale-3.0"):GetLocale(addonName, true)
+local libDBIcon = _G.LibStub("LibDBIcon-1.0")
 
 function BGH:OnInitialize()
-    self.db = LibStub("AceDB-3.0"):New(addonName, {
+    self.db = _G.LibStub("AceDB-3.0"):New(addonName, {
         profile = {
             minimapButton = {
                 hide = false,
@@ -22,7 +22,7 @@ function BGH:OnInitialize()
     self:RegisterEvent("UPDATE_BATTLEFIELD_SCORE")
     self:RegisterEvent("CHAT_MSG_COMBAT_HONOR_GAIN")
 
-	self:DrawMinimapIcon()
+    self:DrawMinimapIcon()
     self:RegisterOptionsTable()
 
     self.battlegroundEnded = false
@@ -38,7 +38,7 @@ end
 -- Wowpedia: Fired whenever joining a queue, leaving a queue, battlefield to join is changed, when you can join a battlefield, or if somebody wins the battleground.
 -- Fired at enter BG | reload in BG | on game over | leave BG | queue BG | regularly while in queue | queue pops
 function BGH:UPDATE_BATTLEFIELD_STATUS(eventName, battleFieldIndex)
-    local status, mapName = GetBattlefieldStatus(battleFieldIndex)
+    local status, mapName = _G.GetBattlefieldStatus(battleFieldIndex)
     -- status = ["queued", "confirm", "active", "none" = leave] -- active is also triggered on game over
     -- mapName = ["Alterac Valley"]
     -- instanceID = 0 queued & confirm & none / >0 active
@@ -47,13 +47,13 @@ function BGH:UPDATE_BATTLEFIELD_STATUS(eventName, battleFieldIndex)
     if self.current["status"] == "none" and status == "active" then
         self.battlegroundEnded = false
         self.current = {
-	        status = "none",
-	        battleFieldIndex = nil,
-	        stats = {},
-	    }
+            status = "none",
+            battleFieldIndex = nil,
+            stats = {},
+        }
         self.current["status"] = status
         self.current["battleFieldIndex"] = battleFieldIndex
-        self.current["stats"]["startTime"] = time()
+        self.current["stats"]["startTime"] = _G.time()
         self.current["stats"]["honorGained"] = 0
         self.current["stats"]["mapId"] = self:MapId(mapName)
     elseif self.current["battleFieldIndex"] == battleFieldIndex and self.current["status"] == "active" and status == "none" then
@@ -65,7 +65,7 @@ end
 -- This is pretty regular at around 1/sec (maybe linked to Capping ?)
 function BGH:UPDATE_BATTLEFIELD_SCORE(eventName)
     -- Faction/team that has won the battlefield. Results are: nil if nobody has won, 0 for Horde and 1 for Alliance in a battleground
-    local battlefieldWinner = GetBattlefieldWinner()
+    local battlefieldWinner = _G.GetBattlefieldWinner()
     if battlefieldWinner == nil or self.battlegroundEnded then
         return
     end
@@ -84,7 +84,7 @@ function BGH:CHAT_MSG_COMBAT_HONOR_GAIN(_, chatMessage)
     end
     if self.current["stats"]["endTime"] then
         local endTime = self.current["stats"]["endTime"]
-        if time() - endTime > 5 then
+        if _G.time() - endTime > 5 then
             return
         end
     end
@@ -92,27 +92,27 @@ function BGH:CHAT_MSG_COMBAT_HONOR_GAIN(_, chatMessage)
 end
 
 function BGH:ExtractHonorFromMessage(message)
-	for token in string.gmatch(message, "[^%s]+") do
-		local strToParse = token:gsub('%(', '')
-		local honor = tonumber(strToParse)
-		if not (honor == nil) then
-			return honor
-		end
-	end
+    for token in string.gmatch(message, "[^%s]+") do
+        local strToParse = token:gsub('%(', '')
+        local honor = tonumber(strToParse)
+        if not (honor == nil) then
+            return honor
+        end
+    end
 
-	return 0
+    return 0
 end
 
 function BGH:RecordBattleground()
-    self.current["stats"]["battlefieldWinner"] = GetBattlefieldWinner()
-    self.current["stats"]["endTime"] = time()
+    self.current["stats"]["battlefieldWinner"] = _G.GetBattlefieldWinner()
+    self.current["stats"]["endTime"] = _G.time()
     
     -- BG specific stats
-    local numStatColumns = GetNumBattlefieldStats()
-    local numScores = GetNumBattlefieldScores()
+    local numStatColumns = _G.GetNumBattlefieldStats()
+    local numScores = _G.GetNumBattlefieldScores()
     local playerScore
     for i=1, numScores do
-        name, killingBlows, honorableKills, deaths, _, _, _, _, _, _, damageDone, healingDone = GetBattlefieldScore(i)
+        name, killingBlows, honorableKills, deaths, _, _, _, _, _, _, damageDone, healingDone = _G.GetBattlefieldScore(i)
         if name == UnitName("player") then
             playerScore = {
                 ["killingBlows"] = killingBlows,
@@ -181,25 +181,25 @@ function BGH:VerifyStats(stats)
 end
 
 function BGH:DrawMinimapIcon()
-	libDBIcon:Register(addonName, LibStub("LibDataBroker-1.1"):NewDataObject(addonName,
-	{
-		type = "data source",
-		text = addonName,
+    libDBIcon:Register(addonName, _G.LibStub("LibDataBroker-1.1"):NewDataObject(addonName,
+    {
+        type = "data source",
+        text = addonName,
         icon = "interface/icons/inv_misc_book_03",
-		OnClick = function(self, button)
-			if (button == "RightButton") then
-                InterfaceOptionsFrame_OpenToCategory(addonName)
-                InterfaceOptionsFrame_OpenToCategory(addonName)
+        OnClick = function(self, button)
+            if (button == "RightButton") then
+                _G.InterfaceOptionsFrame_OpenToCategory(addonName)
+                _G.InterfaceOptionsFrame_OpenToCategory(addonName)
             else
                 BGH:Toggle()
             end
-		end,
-		OnTooltipShow = function(tooltip)
-			tooltip:AddLine(string.format("%s |cff777777v%s|r", addonTitle, "@project-version@"))
-			tooltip:AddLine(string.format("|cFFCFCFCF%s|r %s", L["Left Click"], L["to open the main window"]))
-			tooltip:AddLine(string.format("|cFFCFCFCF%s|r %s", L["Right Click"], L["to open options"]))
-			tooltip:AddLine(string.format("|cFFCFCFCF%s|r %s", L["Drag"], L["to move this button"]))
-		end
+        end,
+        OnTooltipShow = function(tooltip)
+            tooltip:AddLine(string.format("%s |cff777777v%s|r", addonTitle, "0.7.6"))
+            tooltip:AddLine(string.format("|cFFCFCFCF%s|r %s", L["Left Click"], L["to open the main window"]))
+            tooltip:AddLine(string.format("|cFFCFCFCF%s|r %s", L["Right Click"], L["to open options"]))
+            tooltip:AddLine(string.format("|cFFCFCFCF%s|r %s", L["Drag"], L["to move this button"]))
+        end
     }), self.db.profile.minimapButton)
 end
 
@@ -212,29 +212,50 @@ function BGH:ToggleMinimapButton()
     end
 end
 
-function BGH:BuildTable(sortColumn)
+function BGH:BuildTable(sortColumn, BGFilter)
     -- self:Print("Rebuilding data table")
     local tbl = {}
 
     for _, row in ipairs(self.db.char.history) do
-    	local honorGained = 0
-    	if not (row["honorGained"] == nil) then
-        	honorGained = row["honorGained"]
+        if BGFilter > 0 then
+            if BGFilter == row["mapId"] then
+                local honorGained = 0
+                if not (row["honorGained"] == nil) then
+                    honorGained = row["honorGained"]
+                end
+                table.insert(tbl, {
+                    ["endTime"] = row["endTime"],
+                    ["mapId"] = row["mapId"],
+                    ["mapName"] = self:MapName(row["mapId"]),
+                    ["runTime"] = (row["endTime"] - row["startTime"]),
+                    ["battlefieldWinner"] = row["battlefieldWinner"],
+                    ["killingBlows"] = row["score"]["killingBlows"],
+                    ["honorableKills"] = row["score"]["honorableKills"],
+                    ["deaths"] = row["score"]["deaths"],
+                    ["honorGained"] = honorGained,
+                    ["damageDone"] = row["score"]["damageDone"],
+                    ["healingDone"] = row["score"]["healingDone"],
+                })
+            end
+        else
+            local honorGained = 0
+            if not (row["honorGained"] == nil) then
+                honorGained = row["honorGained"]
+            end
+            table.insert(tbl, {
+                ["endTime"] = row["endTime"],
+                ["mapId"] = row["mapId"],
+                ["mapName"] = self:MapName(row["mapId"]),
+                ["runTime"] = (row["endTime"] - row["startTime"]),
+                ["battlefieldWinner"] = row["battlefieldWinner"],
+                ["killingBlows"] = row["score"]["killingBlows"],
+                ["honorableKills"] = row["score"]["honorableKills"],
+                ["deaths"] = row["score"]["deaths"],
+                ["honorGained"] = honorGained,
+                ["damageDone"] = row["score"]["damageDone"],
+                ["healingDone"] = row["score"]["healingDone"],
+            })
         end
-        table.insert(tbl, {
-            ["endTime"] = row["endTime"],
-            ["mapId"] = row["mapId"],
-            ["mapName"] = self:MapName(row["mapId"]),
-            ["runTime"] = (row["endTime"] - row["startTime"]),
-            ["battlefieldWinner"] = row["battlefieldWinner"],
-            ["killingBlows"] = row["score"]["killingBlows"],
-            ["honorableKills"] = row["score"]["honorableKills"],
-            ["deaths"] = row["score"]["deaths"],
-            ["honorGained"] = honorGained,
-            ["damageDone"] = row["score"]["damageDone"],
-            ["healingDone"] = row["score"]["healingDone"],
-        })
-        
     end
 
     if sortColumn then
@@ -370,7 +391,7 @@ function BGH:CalcStats(rows)
         return s
     end
 
-    local playerFactionId = (UnitFactionGroup("player") == "Alliance" and 1 or 0)
+    local playerFactionId = (_G.UnitFactionGroup("player") == "Alliance" and 1 or 0)
     for _, row in ipairs(rows) do
         local id = row["mapId"]
         if id > 0 then
