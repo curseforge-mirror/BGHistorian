@@ -26,7 +26,7 @@ function BGH:CreateGUI()
 	statsHeader:SetLayout("Flow")
     f:AddChild(statsHeader)
 
-    lblWinrate = BGH:CreateHeaderButton(statsHeader, lblDuration, 0.16, "Winrate", function(idx)
+    lblWinrate = BGH:CreateHeaderButton(statsHeader, lblDuration, 0.14, "Winrate", function(idx)
         return string.format("|cff777777%s|r : |cFFCFCFCF%i/%i (%.2f%%)|r", self:MapName(idx), stats["victories"][idx], stats["count"][idx], stats["winrate"][idx] * 100)
     end)
     lblDuration = BGH:CreateHeaderButton(statsHeader, lblDuration, 0.14, "Duration", function(idx)
