@@ -86,8 +86,8 @@ end
 
 function BGH:CreateBGFilterDropDown()
     dropDown = _G.CreateFrame("Frame", "FilterDropDownMenu", f.frame, "UIDropDownMenuTemplate")
-    dropDown:SetPoint("bottomright", f.frame, "bottomright", -120, 8)
-    _G.UIDropDownMenu_SetWidth(dropDown, 200)
+    dropDown:SetPoint("bottomright", f.frame, "bottomright", -115, 9)
+    _G.UIDropDownMenu_SetWidth(dropDown, 150)
     _G.UIDropDownMenu_SetText(dropDown, self:MapIdFilterDisplayName(BGFilter))
 
     _G.UIDropDownMenu_Initialize(dropDown, function()
@@ -99,6 +99,7 @@ function BGH:CreateBGFilterDropDown()
             info.checked = i == BGFilter
             info.owner = dropDown
             info.fontObject = _G.GameFontHighlight
+            info.padding = 10
             info.func = FilterDropDownMenu_OnClick
             if i > 0 then
                 info.icon = BGH:MapIconId(i)
