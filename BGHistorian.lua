@@ -88,6 +88,10 @@ function BGH:CHAT_MSG_COMBAT_HONOR_GAIN(_, chatMessage)
             return
         end
     end
+    -- Only attempt to record honor if we have initialized stats
+    if not self.current["stats"]["honorGained"] then
+        return
+    end
     self.current["stats"]["honorGained"] = self.current["stats"]["honorGained"] + honor
 end
 

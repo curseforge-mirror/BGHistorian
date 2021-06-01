@@ -5,86 +5,50 @@ L["%F %T"] = "%F %T"
 L["%ih %im"] = "%ih %im"
 L["%im %is"] = "%im %is"
 L["%is"] = "%is"
---[[Translation missing --]]
-L["All Battlegrounds"] = "All Battlegrounds"
+L["All Battlegrounds"] = "所有战场"
 L["Alterac Valley"] = "奥特兰克山谷"
 L["Arathi Basin"] = "阿拉希盆地"
---[[Translation missing --]]
-L["Avg"] = "Avg"
---[[Translation missing --]]
-L["Battleground"] = "Battleground"
---[[Translation missing --]]
-L["Battlegrounds records can impact memory usage (0 means unlimited)"] = "Battlegrounds records can impact memory usage (0 means unlimited)"
+L["Avg"] = "平均"
+L["Battleground"] = "战场"
+L["Battlegrounds records can impact memory usage (0 means unlimited)"] = "战场记录会占用内存容量(0表示不限制)"
 --[[Translation missing --]]
 L["Cleanup and optimize collected data"] = "Cleanup and optimize collected data"
---[[Translation missing --]]
-L["Damage"] = "Damage"
---[[Translation missing --]]
-L["Damage Done"] = "Damage Done"
+L["Damage"] = "伤害"
+L["Damage Done"] = "伤害"
 --[[Translation missing --]]
 L["Database optimized"] = "Database optimized"
---[[Translation missing --]]
-L["Database reset"] = "Database reset"
---[[Translation missing --]]
-L["Database Settings"] = "Database Settings"
---[[Translation missing --]]
-L["Date"] = "Date"
---[[Translation missing --]]
-L["Deaths"] = "Deaths"
---[[Translation missing --]]
-L["Delete all collected data"] = "Delete all collected data"
---[[Translation missing --]]
-L["Drag"] = "Drag"
---[[Translation missing --]]
-L["Duration"] = "Duration"
---[[Translation missing --]]
-L["Eye of the Storm"] = "Eye of the Storm"
---[[Translation missing --]]
-L["Healing"] = "Healing"
---[[Translation missing --]]
-L["Healing Done"] = "Healing Done"
---[[Translation missing --]]
+L["Database reset"] = "重置数据"
+L["Database Settings"] = "数据设置"
+L["Date"] = "日期"
+L["Deaths"] = "死亡"
+L["Delete all collected data"] = "删除所有已记录数据"
+L["Drag"] = "拖动"
+L["Duration"] = "战斗时间"
+L["Eye of the Storm"] = "风暴之眼"
+L["Healing"] = "治疗"
+L["Healing Done"] = "造成治疗"
 L["HK"] = "HK"
---[[Translation missing --]]
-L["Honor"] = "Honor"
---[[Translation missing --]]
-L["Honorable Kills"] = "Honorable Kills"
---[[Translation missing --]]
+L["Honor"] = "荣誉"
+L["Honorable Kills"] = "荣誉击杀"
 L["KB"] = "KB"
---[[Translation missing --]]
-L["Killing Blows"] = "Killing Blows"
---[[Translation missing --]]
-L["Left Click"] = "Left Click"
---[[Translation missing --]]
-L["Maximum history records"] = "Maximum history records"
---[[Translation missing --]]
-L["Minimap Button Settings"] = "Minimap Button Settings"
---[[Translation missing --]]
-L["Opens or closes the main window"] = "Opens or closes the main window"
+L["Killing Blows"] = "终结一击"
+L["Left Click"] = "左键点击"
+L["Maximum history records"] = "最大战场记录数量"
+L["Minimap Button Settings"] = "小地图按钮设置"
+L["Opens or closes the main window"] = "打开或关闭主窗口"
 --[[Translation missing --]]
 L["Optimize database"] = "Optimize database"
---[[Translation missing --]]
-L["Options"] = "Options"
+L["Options"] = "选项"
 --[[Translation missing --]]
 L["Purge database"] = "Purge database"
---[[Translation missing --]]
-L["Recorded %i battlegrounds"] = "Recorded %i battlegrounds"
---[[Translation missing --]]
-L["Right Click"] = "Right Click"
---[[Translation missing --]]
-L["Show minimap button"] = "Show minimap button"
---[[Translation missing --]]
-L["Sum"] = "Sum"
---[[Translation missing --]]
-L["to move this button"] = "to move this button"
---[[Translation missing --]]
-L["to open options"] = "to open options"
---[[Translation missing --]]
-L["to open the main window"] = "to open the main window"
---[[Translation missing --]]
-L["Toggle"] = "Toggle"
+L["Recorded %i battlegrounds"] = "已记录%i场战斗"
+L["Right Click"] = "右键点击"
+L["Show minimap button"] = "显示小地图按钮"
+L["Sum"] = "总计"
+L["to move this button"] = "以移动按钮"
+L["to open options"] = "以打开设置"
+L["to open the main window"] = "以打开主窗口"
+L["Toggle"] = "切换"
 L["Warsong Gulch"] = "战歌峡谷"
---[[Translation missing --]]
-L["Winner"] = "Winner"
---[[Translation missing --]]
-L["Winrate"] = "Winrate"
+L["Winner"] = "胜方"
+L["Winrate"] = "胜率"
