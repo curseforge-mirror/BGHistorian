@@ -64,7 +64,6 @@ end
 -- Wowpedia: Fired whenever new battlefield score data has been recieved, this is usually fired after RequestBattlefieldScoreData is called.
 -- This is pretty regular at around 1/sec (maybe linked to Capping ?)
 function BGH:UPDATE_BATTLEFIELD_SCORE(eventName)
-    print("BGH Debug D", eventName)
     -- Faction/team that has won the battlefield. Results are: nil if nobody has won, 0 for Horde and 1 for Alliance in a battleground
     local battlefieldWinner = _G.GetBattlefieldWinner()
     if battlefieldWinner == nil or self.battlegroundEnded then
