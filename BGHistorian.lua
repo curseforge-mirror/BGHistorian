@@ -1,4 +1,4 @@
-local addonName = "BGHistorian"
+1local addonName = "BGHistorian"
 local addonTitle = select(2, _G.GetAddOnInfo(addonName))
 local BGH = _G.LibStub("AceAddon-3.0"):NewAddon(addonName, "AceConsole-3.0", "AceEvent-3.0")
 local L = _G.LibStub("AceLocale-3.0"):GetLocale(addonName, true)
@@ -64,6 +64,7 @@ end
 -- Wowpedia: Fired whenever new battlefield score data has been recieved, this is usually fired after RequestBattlefieldScoreData is called.
 -- This is pretty regular at around 1/sec (maybe linked to Capping ?)
 function BGH:UPDATE_BATTLEFIELD_SCORE(eventName)
+    print("BGH Debug D", eventName)
     -- Faction/team that has won the battlefield. Results are: nil if nobody has won, 0 for Horde and 1 for Alliance in a battleground
     local battlefieldWinner = _G.GetBattlefieldWinner()
     if battlefieldWinner == nil or self.battlegroundEnded then
@@ -107,8 +108,31 @@ function BGH:ExtractHonorFromMessage(message)
     return 0
 end
 
+-- Returns true if the specified aura id exists on the player.
+function BGH:AuraExists(id)
+    for i = 1, 40 do
+        local aura_id = select(10, UnitAura("player", i))
+        if aura_id == nil then break end
+        if aura_id == id then return true end
+        if id == select(10, UnitAura("player", i)) then return true end
+    end
+    return false
+end
+
+-- Returns true if the player is currently under the effects of disguised faction.
+BGH.DisguisedFaction = (function()
+    local disguise_id = UnitFactionGroup("player") == "Horde" and 81748 or 81744
+    return function(self)
+        return BGH:AuraExists(disguise_id) -- Check if we have the horde/alliance disguise.
+    end
+end)()
+
 function BGH:RecordBattleground()
-    self.current["stats"]["battlefieldWinner"] = _G.GetBattlefieldWinner()
+    local winner = _G.GetBattlefieldWinner()
+    if winner == nil then return end
+    -- Flip the winner in the case that we belonged to the opposite faction.
+    if BGH:DisguisedFaction() then winner = (winner + 1) % 2 end
+    self.current["stats"]["battlefieldWinner"] = winner
     self.current["stats"]["endTime"] = _G.time()
     
     -- BG specific stats
