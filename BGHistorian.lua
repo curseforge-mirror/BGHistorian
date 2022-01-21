@@ -1,4 +1,4 @@
-1local addonName = "BGHistorian"
+local addonName = "BGHistorian"
 local addonTitle = select(2, _G.GetAddOnInfo(addonName))
 local BGH = _G.LibStub("AceAddon-3.0"):NewAddon(addonName, "AceConsole-3.0", "AceEvent-3.0")
 local L = _G.LibStub("AceLocale-3.0"):GetLocale(addonName, true)
