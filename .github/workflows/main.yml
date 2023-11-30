@@ -1,44 +1,33 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - "main"
+    branches: [ master ]
+    tags:
+     - '**'
+     - '!**classic**'
 
-name: Generate Release With Zip Asset
-
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  # This workflow contains a single job called "build"
   build:
-    name: Upload Release Asset
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    env:
+      GITHUB_OAUTH: ${{ secrets.REPO_SETUP_TOKEN }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout code
+      # we first have to clone the AddOn project, this is a required step
+      - name: Clone project
         uses: actions/checkout@v2
-      - name: Get current time
-        uses: srfrnk/current-time@master
-        id: current-time
         with:
-          format: YYYY.MM.DD.HH.mm
-      - name: Zip project
-        run: |
-          rsync -a . BGHistorian
-          zip -r BGHistorian.${{ steps.current-time.outputs.formattedTime }}.zip BGHistorian
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ steps.current-time.outputs.formattedTime }}
-          release_name: v${{ steps.current-time.outputs.formattedTime }}
-          draft: false
-          prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} 
-          asset_path: ./BGHistorian.${{ steps.current-time.outputs.formattedTime }}.zip
-          asset_name: BGHistorian.${{ steps.current-time.outputs.formattedTime }}.zip
-          asset_content_type: application/zip
+          fetch-depth: 0  # gets git history for changelogs
+
+      # once cloned, we just run the GitHub Action for the packager project
+      - name: Package and release
+        uses: BigWigsMods/packager@v2
